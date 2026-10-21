@@ -1,21 +1,20 @@
-package com.restaurant.management.service.impl;
+package com.restaurant.management.application.service.impl;
 
-import com.restaurant.management.dto.request.AddressRequest;
-import com.restaurant.management.dto.request.CreateUserRequest;
-import com.restaurant.management.dto.request.UpdatePasswordRequest;
-import com.restaurant.management.dto.request.UpdateUserRequest;
-import com.restaurant.management.dto.response.UserResponse;
-import com.restaurant.management.enums.UserType;
-import com.restaurant.management.exception.EmailAlreadyExistsException;
-import com.restaurant.management.exception.ExceptionMessages;
-import com.restaurant.management.exception.InvalidPasswordException;
-import com.restaurant.management.exception.UserNotFoundException;
-import com.restaurant.management.factory.UserFactory;
-import com.restaurant.management.model.Address;
-import com.restaurant.management.model.Client;
-import com.restaurant.management.model.User;
-import com.restaurant.management.repository.UserRepository;
-import com.restaurant.management.service.PasswordService;
+import com.restaurant.management.application.command.AddressData;
+import com.restaurant.management.application.command.ChangePasswordCommand;
+import com.restaurant.management.application.command.CreateUserCommand;
+import com.restaurant.management.application.command.UpdateUserCommand;
+import com.restaurant.management.domain.exception.EmailAlreadyExistsException;
+import com.restaurant.management.domain.exception.ExceptionMessages;
+import com.restaurant.management.domain.exception.InvalidPasswordException;
+import com.restaurant.management.domain.exception.UserNotFoundException;
+import com.restaurant.management.domain.exception.UserTypeNotFoundException;
+import com.restaurant.management.domain.model.Address;
+import com.restaurant.management.domain.model.User;
+import com.restaurant.management.domain.model.UserType;
+import com.restaurant.management.domain.port.PasswordHasher;
+import com.restaurant.management.domain.repository.UserRepository;
+import com.restaurant.management.domain.repository.UserTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,8 +31,11 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("UserServiceImpl")
@@ -43,32 +45,31 @@ class UserServiceImplTest {
     private UserRepository repository;
 
     @Mock
-    private UserFactory userFactory;
+    private UserTypeRepository userTypeRepository;
 
     @Mock
-    private PasswordService passwordService;
+    private PasswordHasher passwordHasher;
 
     @InjectMocks
     private UserServiceImpl userService;
 
-    private Client existingUser;
+    private User existingUser;
 
     @BeforeEach
     void setUp() {
-        existingUser = new Client();
+        UserType userType = new UserType();
+        userType.setId(1L);
+        userType.setName("Cliente");
+
+        existingUser = new User();
         existingUser.setId(1L);
         existingUser.setName("João Silva");
         existingUser.setEmail("joao@email.com");
         existingUser.setLogin("joaosilva");
         existingUser.setPassword("$2a$hashed");
-        existingUser.setLastChange(LocalDateTime.of(2026, 8, 29, 14, 0));
-
-        Address address = new Address();
-        address.setStreet("Rua das Flores");
-        address.setNumber("100");
-        address.setCity("São Paulo");
-        address.setZipCode("01001-000");
-        existingUser.setAddress(address);
+        existingUser.setUserType(userType);
+        existingUser.setLastChange(LocalDateTime.of(2020, 1, 1, 0, 0));
+        existingUser.setAddress(new Address("Rua das Flores", "100", "São Paulo", "01001-000"));
     }
 
     @Nested
@@ -76,62 +77,71 @@ class UserServiceImplTest {
     class CreateTests {
 
         @Test
-        @DisplayName("deve criar usuário com senha hasheada e retornar response")
+        @DisplayName("deve criar usuário com senha hasheada e registrar lastChange")
         void shouldCreateUserWithHashedPassword() {
-            CreateUserRequest request = new CreateUserRequest(
+            UserType userType = new UserType();
+            userType.setId(10L);
+            userType.setName("Cliente");
+
+            CreateUserCommand command = new CreateUserCommand(
                     "João Silva",
                     "joao@email.com",
                     "joaosilva",
                     "senha123",
-                    UserType.CLIENT,
-                    new AddressRequest("Rua das Flores", "100", "São Paulo", "01001-000")
+                    10L,
+                    new AddressData("Rua das Flores", "100", "São Paulo", "01001-000")
             );
-            Client entity = new Client();
-            entity.setName(request.name());
-            entity.setEmail(request.email());
-            entity.setLogin(request.login());
 
-            when(repository.existsByEmail(request.email())).thenReturn(false);
-            when(userFactory.createEntity(request)).thenReturn(entity);
-            when(passwordService.hash(request.password())).thenReturn("$2a$hashed");
+            when(repository.existsByEmail(command.email())).thenReturn(false);
+            when(userTypeRepository.findById(10L)).thenReturn(Optional.of(userType));
+            when(passwordHasher.hash(command.password())).thenReturn("$2a$hashed");
             when(repository.save(any(User.class))).thenAnswer(invocation -> {
                 User saved = invocation.getArgument(0);
                 saved.setId(1L);
                 return saved;
             });
 
-            UserResponse response = userService.create(request);
+            User created = userService.create(command);
 
-            assertEquals(1L, response.id());
-            assertEquals("João Silva", response.name());
-            assertEquals("joao@email.com", response.email());
-            assertEquals("Client", response.userType());
-            verify(passwordService).hash("senha123");
-            verify(repository).save(entity);
-            assertEquals("$2a$hashed", entity.getPassword());
+            ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+            verify(repository).save(captor.capture());
+            assertEquals(1L, created.getId());
+            assertEquals("João Silva", created.getName());
+            assertEquals("joao@email.com", created.getEmail());
+            assertEquals("Cliente", created.getUserType().getName());
+            assertEquals("São Paulo", created.getAddress().getCity());
+            assertEquals("$2a$hashed", captor.getValue().getPassword());
+            assertNotNull(captor.getValue().getLastChange());
+            verify(passwordHasher).hash("senha123");
         }
 
         @Test
         @DisplayName("deve lançar EmailAlreadyExistsException quando o e-mail já existir")
         void shouldThrowWhenEmailAlreadyExists() {
-            CreateUserRequest request = new CreateUserRequest(
-                    "João Silva",
-                    "joao@email.com",
-                    "joaosilva",
-                    "senha123",
-                    UserType.CLIENT,
-                    null
-            );
-            when(repository.existsByEmail(request.email())).thenReturn(true);
+            CreateUserCommand command = new CreateUserCommand(
+                    "João Silva", "joao@email.com", "joaosilva", "senha123", 1L, null);
+            when(repository.existsByEmail(command.email())).thenReturn(true);
 
             EmailAlreadyExistsException ex = assertThrows(
                     EmailAlreadyExistsException.class,
-                    () -> userService.create(request)
+                    () -> userService.create(command)
             );
 
             assertTrue(ex.getMessage().contains("joao@email.com"));
             verify(repository, never()).save(any());
-            verify(userFactory, never()).createEntity(any());
+            verify(userTypeRepository, never()).findById(anyLong());
+        }
+
+        @Test
+        @DisplayName("deve lançar UserTypeNotFoundException quando o tipo não existir")
+        void shouldThrowWhenUserTypeNotFound() {
+            CreateUserCommand command = new CreateUserCommand(
+                    "João Silva", "joao@email.com", "joaosilva", "senha123", 99L, null);
+            when(repository.existsByEmail(command.email())).thenReturn(false);
+            when(userTypeRepository.findById(99L)).thenReturn(Optional.empty());
+
+            assertThrows(UserTypeNotFoundException.class, () -> userService.create(command));
+            verify(repository, never()).save(any());
         }
     }
 
@@ -144,11 +154,11 @@ class UserServiceImplTest {
         void shouldFindByIdWhenUserExists() {
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
 
-            UserResponse response = userService.findById(1L);
+            User user = userService.findById(1L);
 
-            assertEquals(1L, response.id());
-            assertEquals("João Silva", response.name());
-            assertEquals("joaosilva", response.login());
+            assertEquals(1L, user.getId());
+            assertEquals("João Silva", user.getName());
+            assertEquals("joaosilva", user.getLogin());
         }
 
         @Test
@@ -164,10 +174,10 @@ class UserServiceImplTest {
         void shouldFindAllWhenNameIsNull() {
             when(repository.findAll()).thenReturn(List.of(existingUser));
 
-            List<UserResponse> result = userService.findAll(null);
+            List<User> result = userService.findAll(null);
 
             assertEquals(1, result.size());
-            assertEquals("João Silva", result.getFirst().name());
+            assertEquals("João Silva", result.getFirst().getName());
             verify(repository).findAll();
             verify(repository, never()).findByNameContainingIgnoreCase(anyString());
         }
@@ -177,7 +187,7 @@ class UserServiceImplTest {
         void shouldFindAllWhenNameIsBlank() {
             when(repository.findAll()).thenReturn(List.of(existingUser));
 
-            List<UserResponse> result = userService.findAll("   ");
+            List<User> result = userService.findAll("   ");
 
             assertEquals(1, result.size());
             verify(repository).findAll();
@@ -188,10 +198,10 @@ class UserServiceImplTest {
         void shouldFindByNameWhenNameIsProvided() {
             when(repository.findByNameContainingIgnoreCase("joão")).thenReturn(List.of(existingUser));
 
-            List<UserResponse> result = userService.findAll("joão");
+            List<User> result = userService.findAll("joão");
 
             assertEquals(1, result.size());
-            assertEquals("João Silva", result.getFirst().name());
+            assertEquals("João Silva", result.getFirst().getName());
             verify(repository).findByNameContainingIgnoreCase("joão");
             verify(repository, never()).findAll();
         }
@@ -204,43 +214,34 @@ class UserServiceImplTest {
         @Test
         @DisplayName("deve atualizar nome, e-mail e endereço e registrar lastChange")
         void shouldUpdateUserData() {
-            UpdateUserRequest request = new UpdateUserRequest(
+            UpdateUserCommand command = new UpdateUserCommand(
                     "João Silva Atualizado",
                     "joao.novo@email.com",
-                    new AddressRequest("Rua Nova", "200", "Campinas", "13000-000")
+                    new AddressData("Rua Nova", "200", "Campinas", "13000-000")
             );
-            Address newAddress = new Address();
-            newAddress.setStreet("Rua Nova");
-            newAddress.setNumber("200");
-            newAddress.setCity("Campinas");
-            newAddress.setZipCode("13000-000");
+            LocalDateTime before = existingUser.getLastChange();
 
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
             when(repository.existsByEmail("joao.novo@email.com")).thenReturn(false);
-            when(userFactory.toAddress(request.address())).thenReturn(newAddress);
             when(repository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            UserResponse response = userService.update(1L, request);
+            User updated = userService.update(1L, command);
 
-            assertEquals("João Silva Atualizado", response.name());
-            assertEquals("joao.novo@email.com", response.email());
-            assertEquals("Campinas", response.address().city());
-            assertNotNull(existingUser.getLastChange());
+            assertEquals("João Silva Atualizado", updated.getName());
+            assertEquals("joao.novo@email.com", updated.getEmail());
+            assertEquals("Campinas", updated.getAddress().getCity());
+            assertTrue(updated.getLastChange().isAfter(before));
             verify(repository).save(existingUser);
         }
 
         @Test
         @DisplayName("não deve validar unicidade quando o e-mail permanecer o mesmo")
         void shouldNotValidateUniquenessWhenEmailUnchanged() {
-            UpdateUserRequest request = new UpdateUserRequest(
-                    "João Silva Atualizado",
-                    "joao@email.com",
-                    null
-            );
+            UpdateUserCommand command = new UpdateUserCommand("João Silva Atualizado", "joao@email.com", null);
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
             when(repository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            userService.update(1L, request);
+            userService.update(1L, command);
 
             verify(repository, never()).existsByEmail(anyString());
         }
@@ -248,25 +249,54 @@ class UserServiceImplTest {
         @Test
         @DisplayName("deve lançar EmailAlreadyExistsException ao trocar para e-mail já cadastrado")
         void shouldThrowWhenUpdatingToExistingEmail() {
-            UpdateUserRequest request = new UpdateUserRequest(
-                    "João Silva",
-                    "outro@email.com",
-                    null
-            );
+            UpdateUserCommand command = new UpdateUserCommand("João Silva", "outro@email.com", null);
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
             when(repository.existsByEmail("outro@email.com")).thenReturn(true);
 
-            assertThrows(EmailAlreadyExistsException.class, () -> userService.update(1L, request));
+            assertThrows(EmailAlreadyExistsException.class, () -> userService.update(1L, command));
             verify(repository, never()).save(any());
         }
 
         @Test
         @DisplayName("deve lançar UserNotFoundException quando o usuário não existir")
         void shouldThrowWhenUpdatingNonexistentUser() {
-            UpdateUserRequest request = new UpdateUserRequest("Nome", "email@email.com", null);
+            UpdateUserCommand command = new UpdateUserCommand("Nome", "email@email.com", null);
             when(repository.findById(99L)).thenReturn(Optional.empty());
 
-            assertThrows(UserNotFoundException.class, () -> userService.update(99L, request));
+            assertThrows(UserNotFoundException.class, () -> userService.update(99L, command));
+        }
+    }
+
+    @Nested
+    @DisplayName("quando associa um tipo de usuário")
+    class AssignTypeTests {
+
+        @Test
+        @DisplayName("deve associar o tipo e registrar lastChange")
+        void shouldAssignType() {
+            UserType newType = new UserType();
+            newType.setId(2L);
+            newType.setName("Dono de Restaurante");
+            LocalDateTime before = existingUser.getLastChange();
+
+            when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
+            when(userTypeRepository.findById(2L)).thenReturn(Optional.of(newType));
+            when(repository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+            User result = userService.assignType(1L, 2L);
+
+            assertEquals("Dono de Restaurante", result.getUserType().getName());
+            assertTrue(result.getLastChange().isAfter(before));
+        }
+
+        @Test
+        @DisplayName("deve lançar UserTypeNotFoundException quando o tipo não existir")
+        void shouldThrowWhenTypeNotFound() {
+            when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
+            when(userTypeRepository.findById(99L)).thenReturn(Optional.empty());
+
+            assertThrows(UserTypeNotFoundException.class, () -> userService.assignType(1L, 99L));
+            verify(repository, never()).save(any());
         }
     }
 
@@ -277,13 +307,13 @@ class UserServiceImplTest {
         @Test
         @DisplayName("deve atualizar a senha quando a senha atual for válida e a nova for diferente")
         void shouldUpdatePasswordSuccessfully() {
-            UpdatePasswordRequest request = new UpdatePasswordRequest("senha123", "senhaNova456");
+            ChangePasswordCommand command = new ChangePasswordCommand("senha123", "senhaNova456");
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
-            when(passwordService.matches("senha123", existingUser.getPassword())).thenReturn(true);
-            when(passwordService.matches("senhaNova456", existingUser.getPassword())).thenReturn(false);
-            when(passwordService.hash("senhaNova456")).thenReturn("$2a$newHash");
+            when(passwordHasher.matches("senha123", existingUser.getPassword())).thenReturn(true);
+            when(passwordHasher.matches("senhaNova456", existingUser.getPassword())).thenReturn(false);
+            when(passwordHasher.hash("senhaNova456")).thenReturn("$2a$newHash");
 
-            userService.updatePassword(1L, request);
+            userService.updatePassword(1L, command);
 
             ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
             verify(repository).save(captor.capture());
@@ -294,13 +324,13 @@ class UserServiceImplTest {
         @Test
         @DisplayName("deve lançar InvalidPasswordException quando a senha atual for inválida")
         void shouldThrowWhenCurrentPasswordIsInvalid() {
-            UpdatePasswordRequest request = new UpdatePasswordRequest("errada", "senhaNova456");
+            ChangePasswordCommand command = new ChangePasswordCommand("errada", "senhaNova456");
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
-            when(passwordService.matches("errada", existingUser.getPassword())).thenReturn(false);
+            when(passwordHasher.matches("errada", existingUser.getPassword())).thenReturn(false);
 
             InvalidPasswordException ex = assertThrows(
                     InvalidPasswordException.class,
-                    () -> userService.updatePassword(1L, request)
+                    () -> userService.updatePassword(1L, command)
             );
 
             assertEquals(ExceptionMessages.INVALID_CURRENT_PASSWORD, ex.getMessage());
@@ -310,13 +340,13 @@ class UserServiceImplTest {
         @Test
         @DisplayName("deve lançar InvalidPasswordException quando a nova senha for igual à atual")
         void shouldThrowWhenNewPasswordEqualsCurrent() {
-            UpdatePasswordRequest request = new UpdatePasswordRequest("senha123", "senha123");
+            ChangePasswordCommand command = new ChangePasswordCommand("senha123", "senha123");
             when(repository.findById(1L)).thenReturn(Optional.of(existingUser));
-            when(passwordService.matches("senha123", existingUser.getPassword())).thenReturn(true);
+            when(passwordHasher.matches("senha123", existingUser.getPassword())).thenReturn(true);
 
             InvalidPasswordException ex = assertThrows(
                     InvalidPasswordException.class,
-                    () -> userService.updatePassword(1L, request)
+                    () -> userService.updatePassword(1L, command)
             );
 
             assertEquals(ExceptionMessages.NEW_PASSWORD_SAME_AS_CURRENT, ex.getMessage());
@@ -326,10 +356,10 @@ class UserServiceImplTest {
         @Test
         @DisplayName("deve lançar UserNotFoundException quando o usuário não existir")
         void shouldThrowWhenUserNotFoundOnPasswordUpdate() {
-            UpdatePasswordRequest request = new UpdatePasswordRequest("senha123", "senhaNova456");
+            ChangePasswordCommand command = new ChangePasswordCommand("senha123", "senhaNova456");
             when(repository.findById(99L)).thenReturn(Optional.empty());
 
-            assertThrows(UserNotFoundException.class, () -> userService.updatePassword(99L, request));
+            assertThrows(UserNotFoundException.class, () -> userService.updatePassword(99L, command));
         }
     }
 

@@ -1,5 +1,13 @@
-package com.restaurant.management.exception;
+package com.restaurant.management.infrastructure.web;
 
+import com.restaurant.management.domain.exception.EmailAlreadyExistsException;
+import com.restaurant.management.domain.exception.ExceptionMessages;
+import com.restaurant.management.domain.exception.InvalidPasswordException;
+import com.restaurant.management.domain.exception.MenuItemNotFoundException;
+import com.restaurant.management.domain.exception.RestaurantNotFoundException;
+import com.restaurant.management.domain.exception.UserNotFoundException;
+import com.restaurant.management.domain.exception.UserTypeAlreadyExistsException;
+import com.restaurant.management.domain.exception.UserTypeNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,13 +36,19 @@ class GlobalExceptionHandlerTest {
         @Test
         @DisplayName("deve retornar 409 para e-mail já cadastrado")
         void shouldReturnConflictForEmailAlreadyExists() {
-            ProblemDetail detail = handler.handleEmailAlreadyExists(
-                    new EmailAlreadyExistsException("joao@email.com")
-            );
+            ProblemDetail detail = handler.handleEmailAlreadyExists(new EmailAlreadyExistsException("joao@email.com"));
 
             assertEquals(HttpStatus.CONFLICT.value(), detail.getStatus());
             assertNotNull(detail.getDetail());
             assertTrue(detail.getDetail().contains("joao@email.com"));
+        }
+
+        @Test
+        @DisplayName("deve retornar 409 para tipo de usuário já cadastrado")
+        void shouldReturnConflictForUserTypeAlreadyExists() {
+            ProblemDetail detail = handler.handleUserTypeAlreadyExists(new UserTypeAlreadyExistsException("Cliente"));
+
+            assertEquals(HttpStatus.CONFLICT.value(), detail.getStatus());
         }
 
         @Test
@@ -48,11 +62,36 @@ class GlobalExceptionHandlerTest {
         }
 
         @Test
+        @DisplayName("deve retornar 404 para tipo de usuário não encontrado")
+        void shouldReturnNotFoundForMissingUserType() {
+            ProblemDetail detail = handler.handleUserTypeNotFound(new UserTypeNotFoundException(7L));
+
+            assertEquals(HttpStatus.NOT_FOUND.value(), detail.getStatus());
+        }
+
+        @Test
+        @DisplayName("deve retornar 404 para restaurante não encontrado")
+        void shouldReturnNotFoundForMissingRestaurant() {
+            ProblemDetail detail = handler.handleRestaurantNotFound(new RestaurantNotFoundException(5L));
+
+            assertEquals(HttpStatus.NOT_FOUND.value(), detail.getStatus());
+            assertTrue(detail.getDetail().contains("5"));
+        }
+
+        @Test
+        @DisplayName("deve retornar 404 para item do menu não encontrado")
+        void shouldReturnNotFoundForMissingMenuItem() {
+            ProblemDetail detail = handler.handleMenuItemNotFound(new MenuItemNotFoundException(8L));
+
+            assertEquals(HttpStatus.NOT_FOUND.value(), detail.getStatus());
+            assertTrue(detail.getDetail().contains("8"));
+        }
+
+        @Test
         @DisplayName("deve retornar 400 para senha inválida")
         void shouldReturnBadRequestForInvalidPassword() {
             ProblemDetail detail = handler.handleInvalidPassword(
-                    new InvalidPasswordException(ExceptionMessages.INVALID_CURRENT_PASSWORD)
-            );
+                    new InvalidPasswordException(ExceptionMessages.INVALID_CURRENT_PASSWORD));
 
             assertEquals(HttpStatus.BAD_REQUEST.value(), detail.getStatus());
             assertEquals(ExceptionMessages.INVALID_CURRENT_PASSWORD, detail.getDetail());
@@ -83,15 +122,14 @@ class GlobalExceptionHandlerTest {
         }
 
         @Test
-        @DisplayName("deve retornar 409 para violação de integridade no banco")
+        @DisplayName("deve retornar 409 com mensagem genérica para violação de integridade no banco")
         void shouldReturnConflictForDataIntegrityViolation() {
             ProblemDetail detail = handler.handleDataIntegrityViolation(
-                    new DataIntegrityViolationException("duplicate")
-            );
+                    new DataIntegrityViolationException("duplicate"));
 
             assertEquals(HttpStatus.CONFLICT.value(), detail.getStatus());
-            assertNotNull(detail.getDetail());
-            assertTrue(detail.getDetail().contains("duplicados"));
+            assertEquals("Operação viola uma restrição de integridade (registro duplicado ou em uso)",
+                    detail.getDetail());
         }
 
         @Test
