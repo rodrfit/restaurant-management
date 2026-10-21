@@ -185,13 +185,13 @@ cp .env.example .env
 docker compose up --build -d
 ```
 
-O Compose sobe o MySQL 8 (`localhost:3307`) e a aplicação (`localhost:8080`). A API só inicia depois que o MySQL responde ao healthcheck com a senha definida em `MYSQL_ROOT_PASSWORD`.
+O Compose sobe o MySQL 8 (`localhost:3307`) e a aplicação (`localhost:8080`). A API só inicia depois que o MySQL fica saudável. O healthcheck usa o usuário `root` com a senha `root`, então `MYSQL_ROOT_PASSWORD` no `.env` precisa ser `root`.
 
 Variáveis em `.env.example` (os mesmos valores padrão do `application.yml` para execução local):
 
 | Variável | Exemplo | Uso |
 |---|---|---|
-| `MYSQL_ROOT_PASSWORD` | `root` | Senha de root e healthcheck |
+| `MYSQL_ROOT_PASSWORD` | `root` | Senha de root. O healthcheck do Compose espera `root` |
 | `MYSQL_DATABASE` | `restaurant_management` | Banco criado na primeira subida |
 | `MYSQL_USER` | `management` | Usuário da aplicação |
 | `MYSQL_PASSWORD` | `management123` | Senha da aplicação |

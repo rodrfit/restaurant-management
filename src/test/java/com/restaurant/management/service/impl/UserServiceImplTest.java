@@ -15,6 +15,7 @@ import com.restaurant.management.model.Address;
 import com.restaurant.management.model.Client;
 import com.restaurant.management.model.User;
 import com.restaurant.management.repository.UserRepository;
+import com.restaurant.management.repository.UserTypeRepository;
 import com.restaurant.management.service.PasswordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +48,9 @@ class UserServiceImplTest {
 
     @Mock
     private PasswordService passwordService;
+
+    @Mock
+    private UserTypeRepository userTypeRepository;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -84,15 +88,20 @@ class UserServiceImplTest {
                     "joaosilva",
                     "senha123",
                     UserType.CLIENT,
+                    1L,
                     new AddressRequest("Rua das Flores", "100", "São Paulo", "01001-000")
             );
             Client entity = new Client();
             entity.setName(request.name());
             entity.setEmail(request.email());
             entity.setLogin(request.login());
+            com.restaurant.management.model.UserType userType = new com.restaurant.management.model.UserType();
+            userType.setId(1L);
+            userType.setName("Cliente");
 
             when(repository.existsByEmail(request.email())).thenReturn(false);
-            when(userFactory.createEntity(request)).thenReturn(entity);
+            when(userTypeRepository.findById(1L)).thenReturn(Optional.of(userType));
+            when(userFactory.createEntity(request, userType)).thenReturn(entity);
             when(passwordService.hash(request.password())).thenReturn("$2a$hashed");
             when(repository.save(any(User.class))).thenAnswer(invocation -> {
                 User saved = invocation.getArgument(0);
@@ -105,7 +114,7 @@ class UserServiceImplTest {
             assertEquals(1L, response.id());
             assertEquals("João Silva", response.name());
             assertEquals("joao@email.com", response.email());
-            assertEquals("Client", response.userType());
+            assertEquals("Client", response.tipoUsuario());
             verify(passwordService).hash("senha123");
             verify(repository).save(entity);
             assertEquals("$2a$hashed", entity.getPassword());

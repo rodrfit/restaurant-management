@@ -3,7 +3,6 @@ package com.restaurant.management.controller;
 import com.restaurant.management.dto.request.CreateMenuItemRequest;
 import com.restaurant.management.dto.response.MenuItemResponse;
 import com.restaurant.management.service.MenuItemService;
-import com.restaurant.management.controller.MenuItemControllerV1;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,7 +42,7 @@ class MenuItemControllerTest {
 
         Mockito.when(service.findAll()).thenReturn(List.of(i1, i2));
 
-        var result = controller.listAll();
+        var result = controller.findAll().getBody();
 
         assertEquals("Pizza", result.get(0).nome());
         assertEquals("Hamburguer", result.get(1).nome());
@@ -56,7 +55,7 @@ class MenuItemControllerTest {
 
         Mockito.when(service.findById(5L)).thenReturn(response);
 
-        var resultEntity = controller.getById(5L);
+        var resultEntity = controller.findById(5L);
         var result = resultEntity.getBody();
 
         assertEquals(5L, result.id());
@@ -84,6 +83,6 @@ class MenuItemControllerTest {
     void testDeleteMenuItem() {
         var response = controller.delete(20L);
         Mockito.verify(service).delete(20L);
-        assertEquals(204, response.getStatusCodeValue());
+        assertEquals(204, response.getStatusCode().value());
     }
 }

@@ -56,7 +56,6 @@ class UserTypeServiceImplTest {
         UpdateUserTypeRequest request = new UpdateUserTypeRequest("Cliente", "Nova observação do cliente");
 
         when(repository.findById(1L)).thenReturn(java.util.Optional.of(existing));
-        when(repository.existsByNameIgnoreCase("Cliente")).thenReturn(false);
         when(repository.save(any(UserType.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         UserTypeResponse response = service.update(1L, request);

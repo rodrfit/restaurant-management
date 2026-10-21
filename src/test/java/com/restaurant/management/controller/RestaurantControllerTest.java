@@ -28,7 +28,7 @@ class RestaurantControllerTest {
 
         Mockito.when(service.create(any(CreateRestaurantRequest.class))).thenReturn(response);
 
-        var result = controller.create(request);
+        var result = controller.create(request).getBody();
 
         assertEquals(100L, result.id());
         assertEquals("Restaurante Central", result.nome());
@@ -41,7 +41,7 @@ class RestaurantControllerTest {
 
         Mockito.when(service.findAll()).thenReturn(List.of(r1, r2));
 
-        var result = controller.listAll();
+        var result = controller.findAll().getBody();
 
         assertEquals("Restaurante A", result.get(0).nome());
         assertEquals("Restaurante B", result.get(1).nome());
@@ -54,7 +54,7 @@ class RestaurantControllerTest {
 
         Mockito.when(service.findById(10L)).thenReturn(response);
 
-        var result = controller.getById(10L);
+        var result = controller.findById(10L).getBody();
 
         assertEquals(10L, result.id());
         assertEquals("Brasileira", result.tipoCozinha());
@@ -70,7 +70,7 @@ class RestaurantControllerTest {
 
         Mockito.when(service.update(eq(20L), any(CreateRestaurantRequest.class))).thenReturn(response);
 
-        var result = controller.update(20L, request);
+        var result = controller.update(20L, request).getBody();
 
         assertEquals("Restaurante Atualizado", result.nome());
         assertEquals("Mexicana", result.tipoCozinha());
@@ -80,6 +80,6 @@ class RestaurantControllerTest {
     void testDeleteRestaurant() {
         var response = controller.delete(30L);
         Mockito.verify(service).delete(30L);
-        assertEquals(204, response.getStatusCodeValue());
+        assertEquals(204, response.getStatusCode().value());
     }
 }
