@@ -1,42 +1,23 @@
 package com.restaurant.management.domain.model;
 
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class Address {
+
     private String street;
+
     private String number;
+
     private String city;
+
     private String zipCode;
-
-    public Address() {}
-
-    public Address(String street, String number, String city, String zipCode) {
-        this.street = street;
-        this.number = number;
-        this.city = city;
-        this.zipCode = zipCode;
-    }
-
-    public String getStreet() { return street; }
-    public void setStreet(String street) { this.street = street; }
-    public String getNumber() { return number; }
-    public void setNumber(String number) { this.number = number; }
-    public String getCity() { return city; }
-    public void setCity(String city) { this.city = city; }
-    public String getZipCode() { return zipCode; }
-    public void setZipCode(String zipCode) { this.zipCode = zipCode; }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Address)) return false;
-        Address address = (Address) o;
-        return Objects.equals(street, address.street)
-                && Objects.equals(number, address.number)
-                && Objects.equals(city, address.city)
-                && Objects.equals(zipCode, address.zipCode);
-    }
-
-    @Override
-    public int hashCode() { return Objects.hash(street, number, city, zipCode); }
 }
