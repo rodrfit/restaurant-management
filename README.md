@@ -68,6 +68,69 @@ A arquitetura segue os princípios de DDD e Clean Architecture, promovendo alta 
 
 ---
 
+## 🧱 Arquitetura
+
+O projeto segue **Clean Architecture** de forma pragmática, em 3 camadas. A regra central é que as dependências apontam sempre para dentro, em direção ao domínio.
+
+```text
+┌──────────────────────────────────────────────────────────────────┐
+│ infrastructure                                                   │
+│   web · persistence · security · config                          │
+│                                                                  │
+│   ┌──────────────────────────────────────────────────────────┐   │
+│   │ application                                              │   │
+│   │   service (interface + impl) · command                   │   │
+│   │                                                          │   │
+│   │   ┌──────────────────────────────────────────────────┐   │   │
+│   │   │ domain                                           │   │   │
+│   │   │   model · repository (interfaces) · port ·       │   │   │
+│   │   │   exception                                      │   │   │
+│   │   └──────────────────────────────────────────────────┘   │   │
+│   └──────────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────┘
+
+Fluxo de uma requisição:
+
+HTTP -> Controller -> Service -> Repository (porta) -> Adapter JPA -> Banco
+        (Request ->   (regras    (interface em         (Entity <->
+         Command,      de         domain.repository)    Domain via
+         Domain ->     negócio)                         Mapper)
+         Response)
+```
+
+### Regra de dependência
+
+* `domain` não depende de nenhuma outra camada nem de frameworks (sem `org.springframework`, `jakarta.persistence`, Jackson ou Swagger). Lombok é permitido.
+* `application` depende apenas de `domain`. Usa `@Service` e `@Transactional` do Spring (concessão pragmática), mas não importa nada de `infrastructure` nem tipos web (DTOs, `ResponseEntity`).
+* `infrastructure` pode depender de `domain` e `application`.
+
+A regra é verificada automaticamente pelo teste `ArchitectureTest` (ArchUnit), que roda junto com `./mvnw verify`.
+
+### Pacotes e responsabilidades
+
+Base: `com.restaurant.management`
+
+| Pacote | Responsabilidade |
+| :--- | :--- |
+| `domain.model` | Modelos de domínio puros (`User`, `UserType`, `Restaurant`, `MenuItem`, `Address`), incluindo a regra de `lastChange` |
+| `domain.repository` | Interfaces (portas) de acesso a dados, com apenas os métodos realmente usados |
+| `domain.port` | Portas para capacidades externas (`PasswordHasher`) |
+| `domain.exception` | Exceções de negócio (`*NotFoundException`, `EmailAlreadyExistsException` etc.) e `ExceptionMessages` |
+| `application.command` | Records de entrada dos services (`CreateUserCommand`, `SaveRestaurantCommand` etc.), independentes do formato HTTP |
+| `application.service` | Interfaces dos casos de uso e implementações em `impl`; orquestram regras de negócio e transações, recebem commands e devolvem objetos de domínio |
+| `infrastructure.web` | Controllers `*ControllerV1`, DTOs de request/response e `GlobalExceptionHandler`; convertem Request -> Command e domínio -> Response |
+| `infrastructure.persistence` | Entidades JPA, interfaces Spring Data, adapters que implementam `domain.repository` e mappers entidade <-> domínio |
+| `infrastructure.security` | `BcryptPasswordHasher`, implementação de `PasswordHasher` (strength 12) |
+| `infrastructure.config` | Configurações de framework (`OpenApiConfig`) |
+
+### Por que manter service interface + impl
+
+* O controller depende da interface, o que permite testá-lo isolado com um mock do service.
+* A interface define o contrato da camada `application` (commands de entrada, objetos de domínio de saída) e a implementação pode mudar sem afetar quem consome.
+* Mantém o projeto pragmático: não há um UseCase por operação, apenas um service por agregado.
+
+---
+
 ## 🛠️ 5. Tecnologias Utilizadas
 
 * **Linguagem:** Java 21 LTS (`<java.version>21</java.version>`)
