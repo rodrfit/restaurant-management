@@ -1,5 +1,12 @@
-package com.restaurant.management.exception;
+package com.restaurant.management.infrastructure.web;
 
+import com.restaurant.management.domain.exception.MenuItemNotFoundException;
+import com.restaurant.management.domain.exception.RestaurantNotFoundException;
+import com.restaurant.management.domain.exception.EmailAlreadyExistsException;
+import com.restaurant.management.domain.exception.InvalidPasswordException;
+import com.restaurant.management.domain.exception.UserNotFoundException;
+import com.restaurant.management.domain.exception.UserTypeAlreadyExistsException;
+import com.restaurant.management.domain.exception.UserTypeNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -50,10 +57,20 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
     }
 
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    public ProblemDetail handleMenuItemNotFound(MenuItemNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ProblemDetail handleRestaurantNotFound(RestaurantNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         log.error("Violação de integridade no banco", ex);
-        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Dados duplicados ou inválidos (e-mail/login)");
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Operação viola uma restrição de integridade (registro duplicado ou em uso)");
     }
 
     @ExceptionHandler(Exception.class)

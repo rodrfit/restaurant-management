@@ -1,6 +1,7 @@
-package com.restaurant.management.dto.request;
+package com.restaurant.management.infrastructure.web.dto.request;
 
-import com.restaurant.management.exception.ExceptionMessages;
+import com.restaurant.management.application.command.SaveRestaurantCommand;
+import com.restaurant.management.domain.exception.ExceptionMessages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,4 +33,9 @@ public record CreateRestaurantRequest(
         @NotNull(message = ExceptionMessages.OWNER_ID_REQUIRED)
         @Schema(description = "ID do proprietário do restaurante", example = "1")
         Long ownerId
-) {}
+) {
+
+    public SaveRestaurantCommand toCommand() {
+        return new SaveRestaurantCommand(nome, endereco, tipoCozinha, horarioFuncionamento, ownerId);
+    }
+}

@@ -1,6 +1,6 @@
-package com.restaurant.management.dto.response;
+package com.restaurant.management.infrastructure.web.dto.response;
 
-import com.restaurant.management.model.Restaurant;
+import com.restaurant.management.domain.model.Restaurant;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Dados de resposta do restaurante")

@@ -1,9 +1,8 @@
-package com.restaurant.management.dto.request;
+package com.restaurant.management.infrastructure.web.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.restaurant.management.application.command.CreateUserCommand;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.restaurant.management.enums.UserType;
-import com.restaurant.management.exception.ExceptionMessages;
+import com.restaurant.management.domain.exception.ExceptionMessages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -35,10 +34,6 @@ public record CreateUserRequest(
         @Schema(description = "Senha de acesso (mínimo 6, máximo 72 caracteres)", example = "senha123")
         String password,
 
-        @JsonIgnore
-        @Schema(description = "Tipo do usuário (mantido apenas para compatibilidade interna)", example = "CLIENT", allowableValues = {"CLIENT", "RESTAURANT_OWNER"})
-        UserType userType,
-
         @NotNull(message = ExceptionMessages.TYPE_REQUIRED)
         @JsonProperty("id_tipo_usuario")
         @Schema(description = "ID do tipo de usuário associado ao cadastro", example = "1")
@@ -49,7 +44,8 @@ public record CreateUserRequest(
         AddressRequest address
 ) {
 
-    public CreateUserRequest(String name, String email, String login, String password, UserType userType, AddressRequest address) {
-        this(name, email, login, password, userType, null, address);
+    public CreateUserCommand toCommand() {
+        return new CreateUserCommand(name, email, login, password, idTipoUsuario,
+                address != null ? address.toData() : null);
     }
 }

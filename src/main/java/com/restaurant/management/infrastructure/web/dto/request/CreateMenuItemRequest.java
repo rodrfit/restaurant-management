@@ -1,6 +1,7 @@
-package com.restaurant.management.dto.request;
+package com.restaurant.management.infrastructure.web.dto.request;
 
-import com.restaurant.management.exception.ExceptionMessages;
+import com.restaurant.management.application.command.SaveMenuItemCommand;
+import com.restaurant.management.domain.exception.ExceptionMessages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
@@ -36,4 +37,9 @@ public record CreateMenuItemRequest(
         @NotNull(message = ExceptionMessages.RESTAURANT_ID_REQUIRED)
         @Schema(description = "ID do restaurante responsável pelo item", example = "1")
         Long restaurantId
-) {}
+) {
+
+    public SaveMenuItemCommand toCommand() {
+        return new SaveMenuItemCommand(nome, descricao, preco, disponivelNoLocal, fotoPath, restaurantId);
+    }
+}

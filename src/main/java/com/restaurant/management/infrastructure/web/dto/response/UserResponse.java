@@ -1,8 +1,8 @@
-package com.restaurant.management.dto.response;
+package com.restaurant.management.infrastructure.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.restaurant.management.model.User;
+import com.restaurant.management.domain.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
@@ -29,7 +29,7 @@ public record UserResponse(
                 user.getName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getUserType() != null ? user.getUserType().getName() : user.getClass().getSimpleName(),
+                user.getUserType() != null ? user.getUserType().getName() : null,
                 user.getUserType() != null ? user.getUserType().getId() : null,
                 user.getUserType() != null ? user.getUserType().getObservation() : null,
                 user.getLastChange(),

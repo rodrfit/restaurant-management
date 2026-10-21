@@ -1,7 +1,7 @@
-package com.restaurant.management.dto.response;
+package com.restaurant.management.infrastructure.web.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.restaurant.management.model.UserType;
+import com.restaurant.management.domain.model.UserType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Dados de resposta do tipo de usuário")

@@ -1,6 +1,7 @@
-package com.restaurant.management.dto.request;
+package com.restaurant.management.infrastructure.web.dto.request;
 
-import com.restaurant.management.exception.ExceptionMessages;
+import com.restaurant.management.application.command.CreateUserTypeCommand;
+import com.restaurant.management.domain.exception.ExceptionMessages;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,4 +17,9 @@ public record CreateUserTypeRequest(
         @Size(max = 1000, message = ExceptionMessages.USER_TYPE_OBSERVATION_MAX_LENGTH)
         @Schema(description = "Observação do tipo de usuário", example = "Usuário que realiza pedidos no sistema")
         String observation
-) {}
+) {
+
+    public CreateUserTypeCommand toCommand() {
+        return new CreateUserTypeCommand(name, observation);
+    }
+}

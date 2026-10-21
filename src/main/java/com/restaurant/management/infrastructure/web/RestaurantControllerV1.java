@@ -1,8 +1,8 @@
-package com.restaurant.management.controller;
+package com.restaurant.management.infrastructure.web;
 
-import com.restaurant.management.dto.request.CreateRestaurantRequest;
-import com.restaurant.management.dto.response.RestaurantResponse;
-import com.restaurant.management.service.RestaurantService;
+import com.restaurant.management.infrastructure.web.dto.request.CreateRestaurantRequest;
+import com.restaurant.management.infrastructure.web.dto.response.RestaurantResponse;
+import com.restaurant.management.application.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -64,7 +64,7 @@ public class RestaurantControllerV1 {
             )
     })
     public ResponseEntity<RestaurantResponse> create(@RequestBody @Valid CreateRestaurantRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(RestaurantResponse.from(service.create(request.toCommand())));
     }
 
     @PutMapping("/{id}")
@@ -99,7 +99,7 @@ public class RestaurantControllerV1 {
             @Parameter(name = "id", description = "ID do restaurante a ser atualizado", example = "1")
             @PathVariable("id") Long id,
             @RequestBody @Valid CreateRestaurantRequest request) {
-        return ResponseEntity.ok(service.update(id, request));
+        return ResponseEntity.ok(RestaurantResponse.from(service.update(id, request.toCommand())));
     }
 
     @DeleteMapping("/{id}")
@@ -139,7 +139,7 @@ public class RestaurantControllerV1 {
             )
     })
     public ResponseEntity<List<RestaurantResponse>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.findAll().stream().map(RestaurantResponse::from).toList());
     }
 
     @GetMapping("/{id}")
@@ -165,7 +165,7 @@ public class RestaurantControllerV1 {
     public ResponseEntity<RestaurantResponse> findById(
             @Parameter(name = "id", description = "ID do restaurante", example = "1")
             @PathVariable("id") Long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(RestaurantResponse.from(service.findById(id)));
     }
 }
 

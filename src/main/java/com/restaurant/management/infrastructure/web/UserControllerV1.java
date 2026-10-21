@@ -1,10 +1,10 @@
-package com.restaurant.management.controller;
+package com.restaurant.management.infrastructure.web;
 
-import com.restaurant.management.dto.request.CreateUserRequest;
-import com.restaurant.management.dto.request.UpdatePasswordRequest;
-import com.restaurant.management.dto.request.UpdateUserRequest;
-import com.restaurant.management.dto.response.UserResponse;
-import com.restaurant.management.service.UserService;
+import com.restaurant.management.infrastructure.web.dto.request.CreateUserRequest;
+import com.restaurant.management.infrastructure.web.dto.request.UpdatePasswordRequest;
+import com.restaurant.management.infrastructure.web.dto.request.UpdateUserRequest;
+import com.restaurant.management.infrastructure.web.dto.response.UserResponse;
+import com.restaurant.management.application.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -66,7 +66,7 @@ public class UserControllerV1 {
             )
     })
     public ResponseEntity<UserResponse> create(@RequestBody @Valid CreateUserRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(service.create(request.toCommand())));
     }
 
     @PutMapping("/{id}")
@@ -109,7 +109,7 @@ public class UserControllerV1 {
             @Parameter(name = "id", description = "ID do usuário a ser atualizado", example = "1")
             @PathVariable("id") Long id,
             @RequestBody @Valid UpdateUserRequest request) {
-        return ResponseEntity.ok(service.update(id, request));
+        return ResponseEntity.ok(UserResponse.from(service.update(id, request.toCommand())));
     }
 
     @PutMapping("/{id}/password")
@@ -144,7 +144,7 @@ public class UserControllerV1 {
             @Parameter(name = "id", description = "ID do usuário", example = "1")
             @PathVariable("id") Long id,
             @RequestBody @Valid UpdatePasswordRequest request) {
-        service.updatePassword(id, request);
+        service.updatePassword(id, request.toCommand());
         return ResponseEntity.noContent().build();
     }
 
@@ -173,7 +173,7 @@ public class UserControllerV1 {
             @PathVariable("id") Long id,
             @Parameter(name = "typeId", description = "ID do tipo de usuário", example = "1")
             @PathVariable("typeId") Long typeId) {
-        return ResponseEntity.ok(service.assignType(id, typeId));
+        return ResponseEntity.ok(UserResponse.from(service.assignType(id, typeId)));
     }
 
     @DeleteMapping("/{id}")
@@ -215,7 +215,7 @@ public class UserControllerV1 {
     public ResponseEntity<List<UserResponse>> findAll(
             @Parameter(description = "Filtrar por nome", example = "João")
             @RequestParam(required = false) String name) {
-        return ResponseEntity.ok(service.findAll(name));
+        return ResponseEntity.ok(service.findAll(name).stream().map(UserResponse::from).toList());
     }
 
     @GetMapping("/{id}")
@@ -241,6 +241,6 @@ public class UserControllerV1 {
     public ResponseEntity<UserResponse> findById(
             @Parameter(name = "id", description = "ID do usuário", example = "1")
             @PathVariable("id") Long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(UserResponse.from(service.findById(id)));
     }
 }

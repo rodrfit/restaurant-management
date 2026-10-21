@@ -1,9 +1,8 @@
-package com.restaurant.management.controller;
+package com.restaurant.management.infrastructure.web;
 
-import com.restaurant.management.dto.request.CreateUserTypeRequest;
-import com.restaurant.management.dto.request.UpdateUserTypeRequest;
-import com.restaurant.management.dto.response.UserTypeResponse;
-import com.restaurant.management.service.UserTypeService;
+import com.restaurant.management.infrastructure.web.dto.request.CreateMenuItemRequest;
+import com.restaurant.management.infrastructure.web.dto.response.MenuItemResponse;
+import com.restaurant.management.application.service.MenuItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -29,54 +28,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user-types")
+@RequestMapping("/api/v1/menu-items")
 @RequiredArgsConstructor
-@Tag(name = "Tipos de Usuário", description = "Gestão de tipos de usuário do sistema")
-public class UserTypeControllerV1 {
+@Tag(name = "Itens do Menu", description = "Gestão de itens do menu do sistema")
+public class MenuItemControllerV1 {
 
-    private final UserTypeService service;
+    private final MenuItemService service;
 
     @PostMapping
-    @Operation(summary = "Criar tipo de usuário", description = "Cria um novo tipo de usuário no sistema")
+    @Operation(summary = "Criar item de menu", description = "Cria um novo item de menu no sistema")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
-                    description = "Tipo de usuário criado com sucesso",
+                    description = "Item de menu criado com sucesso",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UserTypeResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Dados inválidos",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ProblemDetail.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Tipo de usuário já cadastrado",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ProblemDetail.class)
-                    )
-            )
-    })
-    public ResponseEntity<UserTypeResponse> create(@RequestBody @Valid CreateUserTypeRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
-    }
-
-    @PutMapping("/{id}")
-    @Operation(summary = "Atualizar tipo de usuário", description = "Atualiza os dados de um tipo de usuário existente pelo seu ID")
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Tipo de usuário atualizado com sucesso",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = UserTypeResponse.class)
+                            schema = @Schema(implementation = MenuItemResponse.class)
                     )
             ),
             @ApiResponse(
@@ -89,39 +56,63 @@ public class UserTypeControllerV1 {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Tipo de usuário não encontrado",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ProblemDetail.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "409",
-                    description = "Tipo de usuário já cadastrado",
+                    description = "Restaurante não encontrado",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ProblemDetail.class)
                     )
             )
     })
-    public ResponseEntity<UserTypeResponse> update(
-            @Parameter(name = "id", description = "ID do tipo de usuário a ser atualizado", example = "1")
+    public ResponseEntity<MenuItemResponse> create(@RequestBody @Valid CreateMenuItemRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(MenuItemResponse.from(service.create(request.toCommand())));
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Atualizar item de menu", description = "Atualiza os dados de um item de menu existente pelo seu ID")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Item de menu atualizado com sucesso",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MenuItemResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Item de menu ou restaurante não encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            )
+    })
+    public ResponseEntity<MenuItemResponse> update(
+            @Parameter(name = "id", description = "ID do item de menu a ser atualizado", example = "1")
             @PathVariable("id") Long id,
-            @RequestBody @Valid UpdateUserTypeRequest request) {
-        return ResponseEntity.ok(service.update(id, request));
+            @RequestBody @Valid CreateMenuItemRequest request) {
+        return ResponseEntity.ok(MenuItemResponse.from(service.update(id, request.toCommand())));
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletar tipo de usuário", description = "Deleta um tipo de usuário a partir do ID fornecido")
+    @Operation(summary = "Deletar item de menu", description = "Deleta um item de menu a partir do ID fornecido")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "204",
-                    description = "Tipo de usuário deletado com sucesso",
+                    description = "Item de menu deletado com sucesso",
                     content = @Content
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Tipo de usuário não encontrado",
+                    description = "Item de menu não encontrado",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ProblemDetail.class)
@@ -129,51 +120,52 @@ public class UserTypeControllerV1 {
             )
     })
     public ResponseEntity<Void> delete(
-            @Parameter(name = "id", description = "ID do tipo de usuário a ser deletado", example = "1")
+            @Parameter(name = "id", description = "ID do item de menu a ser deletado", example = "1")
             @PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
-    @Operation(summary = "Listar tipos de usuário", description = "Lista os tipos de usuário cadastrados no sistema")
+    @Operation(summary = "Listar itens do menu", description = "Lista os itens do menu cadastrados no sistema")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
                     description = "Lista retornada com sucesso",
                     content = @Content(
                             mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = UserTypeResponse.class))
+                            array = @ArraySchema(schema = @Schema(implementation = MenuItemResponse.class))
                     )
             )
     })
-    public ResponseEntity<List<UserTypeResponse>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<List<MenuItemResponse>> findAll() {
+        return ResponseEntity.ok(service.findAll().stream().map(MenuItemResponse::from).toList());
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Buscar tipo de usuário", description = "Busca um tipo de usuário a partir do ID fornecido")
+    @Operation(summary = "Buscar item de menu", description = "Busca um item de menu a partir do ID fornecido")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Tipo de usuário encontrado",
+                    description = "Item de menu encontrado",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UserTypeResponse.class)
+                            schema = @Schema(implementation = MenuItemResponse.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Tipo de usuário não encontrado",
+                    description = "Item de menu não encontrado",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ProblemDetail.class)
                     )
             )
     })
-    public ResponseEntity<UserTypeResponse> findById(
-            @Parameter(name = "id", description = "ID do tipo de usuário", example = "1")
+    public ResponseEntity<MenuItemResponse> findById(
+            @Parameter(name = "id", description = "ID do item de menu", example = "1")
             @PathVariable("id") Long id) {
-        return ResponseEntity.ok(service.findById(id));
+        return ResponseEntity.ok(MenuItemResponse.from(service.findById(id)));
     }
 }
+

@@ -1,8 +1,8 @@
-package com.restaurant.management.controller;
+package com.restaurant.management.infrastructure.web;
 
-import com.restaurant.management.dto.request.LoginRequest;
-import com.restaurant.management.dto.response.LoginResponse;
-import com.restaurant.management.service.AuthService;
+import com.restaurant.management.infrastructure.web.dto.request.LoginRequest;
+import com.restaurant.management.infrastructure.web.dto.response.LoginResponse;
+import com.restaurant.management.application.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -50,6 +50,8 @@ public class AuthControllerV1 {
             )
     })
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
-        return ResponseEntity.ok(service.validateLogin(request));
+        return ResponseEntity.ok(service.validateLogin(request.toCommand())
+                .map(LoginResponse::success)
+                .orElseGet(LoginResponse::failure));
     }
 }

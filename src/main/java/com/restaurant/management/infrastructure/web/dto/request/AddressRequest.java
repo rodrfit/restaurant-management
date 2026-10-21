@@ -1,10 +1,10 @@
-package com.restaurant.management.dto.response;
+package com.restaurant.management.infrastructure.web.dto.request;
 
-import com.restaurant.management.model.Address;
+import com.restaurant.management.application.command.AddressData;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Dados do endereço")
-public record AddressResponse(
+public record AddressRequest(
 
         @Schema(description = "Logradouro", example = "Rua das Flores")
         String street,
@@ -18,8 +18,8 @@ public record AddressResponse(
         @Schema(description = "CEP", example = "01310-100")
         String zipCode
 ) {
-    public static AddressResponse from(Address address) {
-        if (address == null) return null;
-        return new AddressResponse(address.getStreet(), address.getNumber(), address.getCity(), address.getZipCode());
+
+    public AddressData toData() {
+        return new AddressData(street, number, city, zipCode);
     }
 }

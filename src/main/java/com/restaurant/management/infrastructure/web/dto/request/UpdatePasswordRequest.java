@@ -1,9 +1,10 @@
-package com.restaurant.management.dto.request;
+package com.restaurant.management.infrastructure.web.dto.request;
 
+import com.restaurant.management.application.command.ChangePasswordCommand;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import com.restaurant.management.exception.ExceptionMessages;
+import com.restaurant.management.domain.exception.ExceptionMessages;
 
 @Schema(description = "Dados para alteração de senha")
 public record UpdatePasswordRequest(
@@ -17,4 +18,8 @@ public record UpdatePasswordRequest(
         @Schema(description = "Nova senha (mínimo 6, máximo 72 caracteres)", example = "senhaNova456")
         String newPassword
 ) {
+
+    public ChangePasswordCommand toCommand() {
+        return new ChangePasswordCommand(actualPassword, newPassword);
+    }
 }
