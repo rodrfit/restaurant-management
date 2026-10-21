@@ -1,4 +1,4 @@
-package com.restaurant.management.exception;
+package com.restaurant.management.domain.exception;
 
 public class UserTypeAlreadyExistsException extends RuntimeException {
     public UserTypeAlreadyExistsException(String name) {

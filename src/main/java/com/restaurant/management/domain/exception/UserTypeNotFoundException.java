@@ -1,4 +1,4 @@
-package com.restaurant.management.exception;
+package com.restaurant.management.domain.exception;
 
 public class UserTypeNotFoundException extends RuntimeException {
     public UserTypeNotFoundException(Long id) {
