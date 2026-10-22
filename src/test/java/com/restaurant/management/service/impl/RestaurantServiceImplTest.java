@@ -2,7 +2,7 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.dto.request.CreateRestaurantRequest;
 import com.restaurant.management.model.Restaurant;
-import com.restaurant.management.model.User;
+import com.restaurant.management.model.RestaurantOwner;
 import com.restaurant.management.repository.RestaurantRepository;
 import com.restaurant.management.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ class RestaurantServiceImplTest {
 
     @Test
     void testCreateRestaurant() {
-        User owner = new User();
+        RestaurantOwner owner = new RestaurantOwner();
         owner.setId(5L);
 
         Mockito.when(userRepository.findById(5L)).thenReturn(Optional.of(owner));
