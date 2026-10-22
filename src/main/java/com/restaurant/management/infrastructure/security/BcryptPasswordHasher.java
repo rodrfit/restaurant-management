@@ -1,17 +1,17 @@
 package com.restaurant.management.infrastructure.security;
 
 import com.restaurant.management.domain.port.PasswordHasher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BcryptPasswordHasher implements PasswordHasher {
+
     private static final int BCRYPT_STRENGTH = 12;
+
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public BcryptPasswordHasher() {
         this(new BCryptPasswordEncoder(BCRYPT_STRENGTH));
     }

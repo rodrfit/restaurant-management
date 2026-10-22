@@ -29,7 +29,7 @@ public record UserResponse(
                 user.getName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getUserType() != null ? user.getUserType().getName() : null,
+                user.getUserType() != null ? user.getUserType().getName() :  user.getClass().getSimpleName(),
                 user.getUserType() != null ? user.getUserType().getId() : null,
                 user.getUserType() != null ? user.getUserType().getObservation() : null,
                 user.getLastChange(),

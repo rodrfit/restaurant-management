@@ -10,6 +10,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 @Schema(description = "Dados para criação de um novo usuário")
 public record CreateUserRequest(
 
@@ -46,6 +48,6 @@ public record CreateUserRequest(
 
     public CreateUserCommand toCommand() {
         return new CreateUserCommand(name, email, login, password, idTipoUsuario,
-                address != null ? address.toData() : null);
+                Objects.nonNull(address) ? address.toData() : null);
     }
 }

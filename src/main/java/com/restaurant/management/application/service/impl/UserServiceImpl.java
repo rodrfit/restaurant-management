@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
         user.setName(command.name());
         user.setEmail(command.email());
-        if (command.address() != null) {
+        if (Objects.nonNull(command.address())) {
             user.setAddress(toAddress(command.address()));
         }
         user.setLastChange(LocalDateTime.now());
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private Address toAddress(AddressData data) {
-        if (data == null) {
+        if (Objects.isNull(data)) {
             return null;
         }
         return new Address(data.street(), data.number(), data.city(), data.zipCode());

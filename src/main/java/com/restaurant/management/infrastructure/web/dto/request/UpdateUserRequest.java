@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.Objects;
+
 @Schema(description = "Dados para atualização das informações do usuário (exceto senha)")
 public record UpdateUserRequest(
 
@@ -25,6 +27,6 @@ public record UpdateUserRequest(
 ) {
 
     public UpdateUserCommand toCommand() {
-        return new UpdateUserCommand(name, email, address != null ? address.toData() : null);
+        return new UpdateUserCommand(name, email, Objects.nonNull(address) ? address.toData() : null);
     }
 }

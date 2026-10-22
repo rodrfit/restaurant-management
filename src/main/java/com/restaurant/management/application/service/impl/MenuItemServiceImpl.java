@@ -8,22 +8,18 @@ import com.restaurant.management.domain.model.MenuItem;
 import com.restaurant.management.domain.model.Restaurant;
 import com.restaurant.management.domain.repository.MenuItemRepository;
 import com.restaurant.management.domain.repository.RestaurantRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
     private final RestaurantRepository restaurantRepository;
-
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository,
-                               RestaurantRepository restaurantRepository) {
-        this.menuItemRepository = menuItemRepository;
-        this.restaurantRepository = restaurantRepository;
-    }
 
     @Override
     public List<MenuItem> findAll() {

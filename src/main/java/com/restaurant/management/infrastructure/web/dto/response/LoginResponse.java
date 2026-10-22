@@ -4,6 +4,8 @@ import com.restaurant.management.domain.exception.ExceptionMessages;
 import com.restaurant.management.domain.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Objects;
+
 @Schema(description = "Resposta da validação de login")
 public record LoginResponse(
         boolean valid,
@@ -17,7 +19,7 @@ public record LoginResponse(
                 true,
                 ExceptionMessages.LOGIN_SUCCESS,
                 user.getId(),
-                user.getUserType() != null ? user.getUserType().getName() : null
+                Objects.nonNull(user.getUserType()) ? user.getUserType().getName() : null
         );
     }
 

@@ -8,21 +8,19 @@ import com.restaurant.management.domain.model.Restaurant;
 import com.restaurant.management.domain.model.User;
 import com.restaurant.management.domain.repository.RestaurantRepository;
 import com.restaurant.management.domain.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository repository;
     private final UserRepository userRepository;
-
-    public RestaurantServiceImpl(RestaurantRepository repository, UserRepository userRepository) {
-        this.repository = repository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public List<Restaurant> findAll() {
@@ -61,8 +59,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setTipoCozinha(command.tipoCozinha());
         restaurant.setHorarioFuncionamento(command.horarioFuncionamento());
 
-        if (command.ownerId() != null
-                && (restaurant.getOwner() == null || !restaurant.getOwner().getId().equals(command.ownerId()))) {
+        if (Objects.nonNull(command.ownerId())
+                && (Objects.isNull(restaurant.getOwner()) || !restaurant.getOwner().getId().equals(command.ownerId()))) {
             User owner = userRepository.findById(command.ownerId())
                     .orElseThrow(() -> new UserNotFoundException(command.ownerId()));
             restaurant.setOwner(owner);

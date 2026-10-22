@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class UserTypeServiceImpl implements UserTypeService {
 
         UserType userType = new UserType();
         userType.setName(normalizedName);
-        userType.setObservation(command.observation() != null ? command.observation().trim() : null);
+        userType.setObservation(Objects.nonNull(command.observation()) ? command.observation().trim() : null);
         return repository.save(userType);
     }
 
@@ -46,7 +47,7 @@ public class UserTypeServiceImpl implements UserTypeService {
         }
 
         userType.setName(normalizedName);
-        userType.setObservation(command.observation() != null ? command.observation().trim() : null);
+        userType.setObservation(Objects.nonNull(command.observation()) ? command.observation().trim() : null);
         return repository.save(userType);
     }
 
