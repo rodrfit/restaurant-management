@@ -7,6 +7,7 @@ import com.restaurant.management.infrastructure.persistence.mapper.MenuItemMappe
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -29,7 +30,7 @@ public class MenuItemRepositoryAdapter implements MenuItemRepository {
 
     @Override
     public MenuItem save(MenuItem menuItem) {
-        return MenuItemMapper.toDomain(delegate.save(MenuItemMapper.toEntity(menuItem)));
+        return MenuItemMapper.toDomain(delegate.save(Objects.requireNonNull(MenuItemMapper.toEntity(menuItem))));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class MenuItemRepositoryAdapter implements MenuItemRepository {
     @Override
     public Optional<MenuItem> findByNameIgnoreCase(String name) {
         return delegate.findAll().stream()
-                .filter(entity -> entity.getNome() != null && entity.getNome().equalsIgnoreCase(name))
+                .filter(entity -> Objects.nonNull(entity.getNome()) && entity.getNome().equalsIgnoreCase(name))
                 .findFirst()
                 .map(MenuItemMapper::toDomain);
     }

@@ -7,6 +7,7 @@ import com.restaurant.management.infrastructure.persistence.mapper.UserTypeMappe
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -29,7 +30,7 @@ public class UserTypeRepositoryAdapter implements UserTypeRepository {
 
     @Override
     public UserType save(UserType userType) {
-        return UserTypeMapper.toDomain(delegate.save(UserTypeMapper.toEntity(userType)));
+        return UserTypeMapper.toDomain(delegate.save(Objects.requireNonNull(UserTypeMapper.toEntity(userType))));
     }
 
     @Override

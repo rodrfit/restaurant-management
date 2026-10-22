@@ -7,6 +7,7 @@ import com.restaurant.management.infrastructure.persistence.mapper.RestaurantMap
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -29,7 +30,7 @@ public class RestaurantRepositoryAdapter implements RestaurantRepository {
 
     @Override
     public Restaurant save(Restaurant restaurant) {
-        return RestaurantMapper.toDomain(delegate.save(RestaurantMapper.toEntity(restaurant)));
+        return RestaurantMapper.toDomain(delegate.save(Objects.requireNonNull(RestaurantMapper.toEntity(restaurant))));
     }
 
     @Override
@@ -50,7 +51,7 @@ public class RestaurantRepositoryAdapter implements RestaurantRepository {
     @Override
     public Optional<Restaurant> findByNameIgnoreCase(String name) {
         return delegate.findAll().stream()
-                .filter(entity -> entity.getNome() != null && entity.getNome().equalsIgnoreCase(name))
+                .filter(entity -> Objects.nonNull(entity.getNome()) && entity.getNome().equalsIgnoreCase(name))
                 .findFirst()
                 .map(RestaurantMapper::toDomain);
     }

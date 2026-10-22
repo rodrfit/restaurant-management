@@ -2,12 +2,15 @@ package com.restaurant.management.infrastructure.persistence.mapper;
 
 import com.restaurant.management.domain.model.MenuItem;
 import com.restaurant.management.infrastructure.persistence.entity.MenuItemEntity;
+import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
+@NoArgsConstructor
 public final class MenuItemMapper {
-    private MenuItemMapper() {}
 
     public static MenuItem toDomain(MenuItemEntity entity) {
-        if (entity == null) {
+        if (Objects.isNull(entity)) {
             return null;
         }
         MenuItem menuItem = new MenuItem();
@@ -22,7 +25,7 @@ public final class MenuItemMapper {
     }
 
     public static MenuItemEntity toEntity(MenuItem domain) {
-        if (domain == null) {
+        if (Objects.isNull(domain)) {
             return null;
         }
         MenuItemEntity entity = new MenuItemEntity();

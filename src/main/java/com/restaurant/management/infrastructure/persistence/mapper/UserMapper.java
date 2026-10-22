@@ -2,12 +2,15 @@ package com.restaurant.management.infrastructure.persistence.mapper;
 
 import com.restaurant.management.domain.model.User;
 import com.restaurant.management.infrastructure.persistence.entity.UserEntity;
+import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
+@NoArgsConstructor
 public final class UserMapper {
-    private UserMapper() {}
 
     public static User toDomain(UserEntity entity) {
-        if (entity == null) {
+        if (Objects.isNull(entity)) {
             return null;
         }
         User user = new User();
@@ -23,7 +26,7 @@ public final class UserMapper {
     }
 
     public static UserEntity toEntity(User domain) {
-        if (domain == null) {
+        if (Objects.isNull(domain)) {
             return null;
         }
         UserEntity entity = new UserEntity();

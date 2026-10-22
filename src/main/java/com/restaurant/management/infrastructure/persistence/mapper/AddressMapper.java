@@ -2,12 +2,15 @@ package com.restaurant.management.infrastructure.persistence.mapper;
 
 import com.restaurant.management.domain.model.Address;
 import com.restaurant.management.infrastructure.persistence.entity.AddressEmbeddable;
+import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
+@NoArgsConstructor
 public final class AddressMapper {
-    private AddressMapper() {}
 
     public static Address toDomain(AddressEmbeddable entity) {
-        if (entity == null) {
+        if (Objects.isNull(entity)) {
             return null;
         }
         Address address = new Address();
@@ -19,7 +22,7 @@ public final class AddressMapper {
     }
 
     public static AddressEmbeddable toEntity(Address domain) {
-        if (domain == null) {
+        if (Objects.isNull(domain)) {
             return null;
         }
         return new AddressEmbeddable(

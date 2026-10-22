@@ -7,6 +7,7 @@ import com.restaurant.management.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -29,12 +30,12 @@ public class UserRepositoryAdapter implements UserRepository {
 
     @Override
     public User save(User user) {
-        return UserMapper.toDomain(delegate.save(UserMapper.toEntity(user)));
+        return UserMapper.toDomain(delegate.save(Objects.requireNonNull(UserMapper.toEntity(user))));
     }
 
     @Override
     public void delete(User user) {
-        delegate.delete(UserMapper.toEntity(user));
+        delegate.delete(Objects.requireNonNull(UserMapper.toEntity(user)));
     }
 
     @Override
