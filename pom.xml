@@ -46,6 +46,7 @@
 		<lombok.version>1.18.46</lombok.version>
         <spring.doc.api.version>3.1.0</spring.doc.api.version>
 		<maven.compiler.release>21</maven.compiler.release>
+		<archunit.version>1.4.1</archunit.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -89,6 +90,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-test-autoconfigure</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tngtech.archunit</groupId>
+			<artifactId>archunit-junit5</artifactId>
+			<version>${archunit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

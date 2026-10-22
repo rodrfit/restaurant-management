@@ -54,17 +54,19 @@ Através de um workshop de **Event Storming**, identificamos os principais event
 
 ## 🏗️ 4. Arquitetura do Sistema
 
-### 4.1 Abordagem Domain-Driven Design (DDD)
-A arquitetura segue os princípios de DDD e Clean Architecture, promovendo alta coesão e baixo acoplamento:
-* **Separation of Concerns (SoC):** Separação clara entre Controllers (Camada de API), Services (Regras de Negócio), Factories (Criação de Objetos), Repositories (Acesso a Dados) e DTOs.
-* **Polimorfismo via JPA Single Table:** Utilização de `@Inheritance(strategy = InheritanceType.SINGLE_TABLE)` na classe `User` para armazenar `Client` e `RestaurantOwner` na mesma tabela (`users`), diferenciados pela coluna discriminadora `dtype`.
+Clean Architecture em 3 camadas. As dependências apontam sempre para dentro, e a regra é verificada pelo `ArchitectureTest` (ArchUnit).
 
-### 4.2 Padrões de Projeto Aplicados (SOLID)
-* **Single Responsibility Principle (SRP):**
-  * As regras de negócio e validações residem na camada de serviço (`UserServiceImpl`).
-  * A responsabilidade de criação polimórfica das entidades foi isolada no componente **`UserFactory`**.
-* **Open/Closed Principle (OCP):** Novos perfis de usuários podem ser adicionados ao `UserFactory` sem modificar o código de serviço existente.
-* **Factory Pattern (`UserFactory`):** Encapsula a lógica de instanciação de entidades concretas (`Client` ou `RestaurantOwner`) e transformações do Objeto de Valor `Address`.
+```text
+infrastructure  ->  application  ->  domain
+
+HTTP -> Controller -> Service -> Repository (porta) -> Adapter JPA -> Banco
+```
+
+| Camada | Pacotes | Responsabilidade |
+| :--- | :--- | :--- |
+| `domain` | `model`, `repository`, `port`, `exception` | Modelos e regras puros (sem Spring/JPA) e portas (interfaces) |
+| `application` | `service`, `command` | Casos de uso: recebem commands e devolvem objetos de domínio |
+| `infrastructure` | `web`, `persistence`, `security`, `config` | Controllers/DTOs, adapters JPA, BCrypt e configurações |
 
 ---
 
