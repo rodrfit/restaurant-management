@@ -25,35 +25,39 @@ A entrega é faseada. A Fase 1 cobriu o cadastro de usuários. A Fase 2 acrescen
 
 ## 🏗️ Arquitetura
 
-A aplicação é um monolito Spring Boot organizado em camadas, com a regra de negócio fora dos controllers e o acesso a dados isolado nos repositórios.
+Clean Architecture em 3 camadas. As dependências apontam sempre para dentro, e a regra é verificada pelo `ArchitectureTest` (ArchUnit).
 
-| Camada | Pacote | Responsabilidade |
-|---|---|---|
-| API | `controller`, `dto` | Endpoints REST, validação de entrada e contratos de request/response |
-| Aplicação | `service`, `factory` | Casos de uso, associação de tipo de usuário e criação de `Client` / `RestaurantOwner` |
-| Persistência | `model`, `repository` | Entidades JPA e Spring Data |
-| Infraestrutura de apoio | `config`, `exception` | OpenAPI, hash de senha e erros no formato RFC 7807 (`ProblemDetail`) |
+```text
+infrastructure  ->  application  ->  domain
 
-O usuário é uma hierarquia JPA em tabela única (`InheritanceType.SINGLE_TABLE`): `User` é a raiz, `Client` e `RestaurantOwner` são as especializações, discriminadas pela coluna `users_type`. O tipo exibido na API vem da entidade `UserType` (`user_types`), associada por `user_type_id`. O nome do tipo também define qual subclasse concreta a `UserFactory` instancia (cliente ou dono).
+HTTP -> Controller -> Service -> Repository (porta) -> Adapter JPA -> Banco
+```
 
-Senhas são armazenadas como hash BCrypt. O login compara o hash e não devolve a senha.
+| Camada | Pacotes | Responsabilidade |
+| :--- | :--- | :--- |
+| `domain` | `model`, `repository`, `port`, `exception` | Modelos e regras puros (sem Spring/JPA) e portas (interfaces) |
+| `application` | `service`, `command` | Casos de uso: recebem commands e devolvem objetos de domínio |
+| `infrastructure` | `web`, `persistence`, `security`, `config` | Controllers/DTOs, adapters JPA, BCrypt e configurações |
+
+O tipo do usuário vem da entidade `UserType` (`user_types`), associada por `user_type_id`. Não há hierarquia `Client`/`RestaurantOwner`. Senhas são armazenadas como hash BCrypt, e o login compara o hash sem devolver a senha.
 
 ### 📂 Estrutura do projeto
 
 ```text
 src/main/java/com/restaurant/management/
-├── config/          # OpenAPI e PasswordEncoder
-├── controller/      # Auth, User, UserType, Restaurant, MenuItem
-├── dto/
-│   ├── request/
-│   └── response/
-├── enums/
-├── exception/
-├── factory/         # UserFactory
-├── model/           # User, Client, RestaurantOwner, UserType, Address, Restaurant, MenuItem
-├── repository/
-└── service/
-    └── impl/
+├── domain/
+│   ├── model/          # User, UserType, Restaurant, MenuItem, Address (sem Spring/JPA)
+│   ├── repository/     # Portas de persistência
+│   ├── port/           # PasswordHasher
+│   └── exception/
+├── application/
+│   ├── command/        # Commands de entrada dos casos de uso
+│   └── service/        # Interfaces e impl/
+└── infrastructure/
+    ├── web/            # Controllers, GlobalExceptionHandler e dto/
+    ├── persistence/    # Entidades JPA, Jpa*Repository, adapters e mappers
+    ├── security/       # BcryptPasswordHasher
+    └── config/         # OpenApiConfig
 ```
 
 ## 🛠️ Tecnologias
@@ -209,6 +213,8 @@ docker compose down
 ```
 
 `docker compose down -v` apaga também o volume do MySQL.
+
+> **Atenção:** bancos locais criados antes da migração para Clean Architecture mantêm a coluna `users_type` (NOT NULL) da antiga herança de usuários, e o cadastro de usuário falha com `409`. Para recriar o banco do zero (apaga os dados locais): `docker compose down -v && docker compose up -d --wait mysql`.
 
 ### ☕ Maven, com o MySQL do Compose
 
