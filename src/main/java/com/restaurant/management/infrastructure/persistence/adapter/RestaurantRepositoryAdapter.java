@@ -5,6 +5,7 @@ import com.restaurant.management.domain.repository.RestaurantRepository;
 import com.restaurant.management.infrastructure.persistence.JpaRestaurantRepository;
 import com.restaurant.management.infrastructure.persistence.mapper.RestaurantMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class RestaurantRepositoryAdapter implements RestaurantRepository {
     }
 
     @Override
+    @Transactional
     public Restaurant save(Restaurant restaurant) {
         return RestaurantMapper.toDomain(delegate.save(Objects.requireNonNull(RestaurantMapper.toEntity(restaurant))));
     }

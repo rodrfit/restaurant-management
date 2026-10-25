@@ -5,6 +5,7 @@ import com.restaurant.management.domain.repository.UserRepository;
 import com.restaurant.management.infrastructure.persistence.JpaUserRepository;
 import com.restaurant.management.infrastructure.persistence.mapper.UserMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         return UserMapper.toDomain(delegate.save(Objects.requireNonNull(UserMapper.toEntity(user))));
     }

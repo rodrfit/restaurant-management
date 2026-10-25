@@ -5,6 +5,7 @@ import com.restaurant.management.domain.repository.MenuItemRepository;
 import com.restaurant.management.infrastructure.persistence.JpaMenuItemRepository;
 import com.restaurant.management.infrastructure.persistence.mapper.MenuItemMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,7 @@ public class MenuItemRepositoryAdapter implements MenuItemRepository {
     }
 
     @Override
+    @Transactional
     public MenuItem save(MenuItem menuItem) {
         return MenuItemMapper.toDomain(delegate.save(Objects.requireNonNull(MenuItemMapper.toEntity(menuItem))));
     }
