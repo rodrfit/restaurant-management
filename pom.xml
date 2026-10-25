@@ -12,7 +12,7 @@
 	<artifactId>management</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
     <name>restaurant-management</name>
-    <description>Sistema de gestao de restaurantes - FIAP Tech Challenge Fase 1</description>
+    <description>Sistema de gestao de restaurantes - FIAP Tech Challenge Fase 2</description>
 	<licenses>
 		<license>
 			<name>MIT License</name>
