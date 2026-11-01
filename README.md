@@ -171,7 +171,7 @@ A atualização (`PUT /api/v1/users/{id}`) aceita apenas `name`, `email` e `addr
 }
 ```
 
-📮 A collection Postman com esses fluxos está em `docs/postman/RestaurantManagement.fase2.2.postman_collection.json`.
+📮 A collection Postman com esses fluxos está em `docs/postman/RestaurantManagement.postman_collection.json`.
 
 ## 🚀 Como executar
 
