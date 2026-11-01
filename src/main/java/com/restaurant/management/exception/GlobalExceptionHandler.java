@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -48,6 +49,14 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining("; "));
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                "Requisição inválida. ID informado em formato incorreto"
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
