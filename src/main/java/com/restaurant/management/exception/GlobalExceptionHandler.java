@@ -33,6 +33,11 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ProblemDetail handleRestaurantNotFound(RestaurantNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(UserTypeAlreadyExistsException.class)
     public ProblemDetail handleUserTypeAlreadyExists(UserTypeAlreadyExistsException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
