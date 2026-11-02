@@ -321,6 +321,7 @@ Há testes de serviço (usuário, tipo, restaurante, cardápio e login), de cont
 * `docker-compose.yml`, `Dockerfile` e `.env.example`
 * Coleção Postman em `docs/postman/RestaurantManagement.fase2.2.postman_collection.json`
 * Swagger em tempo de execução
+* Relatório da Fase 2: `docs/Tech_Challenge_Fase2_Relatorio.md`
 * Este README
 
 ## 📚 11. Referências
