@@ -2,6 +2,7 @@ package com.restaurant.management.service.impl;
 
 import com.restaurant.management.dto.request.CreateMenuItemRequest;
 import com.restaurant.management.dto.response.MenuItemResponse;
+import com.restaurant.management.exception.MenuItemAlreadyExistsException;
 import com.restaurant.management.model.MenuItem;
 import com.restaurant.management.model.Restaurant;
 import com.restaurant.management.repository.MenuItemRepository;
@@ -41,10 +42,17 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItemResponse create(CreateMenuItemRequest request) {
+        if (request.id() != null && menuItemRepository.existsById(request.id())) {
+            throw new MenuItemAlreadyExistsException(request.id());
+        }
+
         Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
         MenuItem menuItem = new MenuItem();
+        if (request.id() != null) {
+            menuItem.setId(request.id());
+        }
         menuItem.setNome(request.nome());
         menuItem.setDescricao(request.descricao());
         menuItem.setPreco(request.preco());
