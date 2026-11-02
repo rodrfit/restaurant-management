@@ -233,6 +233,8 @@ A troca de senha responde `204` sem corpo.
 }
 ```
 
+📮 A collection Postman com esses fluxos está em `docs/postman/restaurant_management.postman_collection`.
+
 ### Erro padronizado
 
 E-mail duplicado, nome de tipo duplicado e recurso inexistente saem assim:
