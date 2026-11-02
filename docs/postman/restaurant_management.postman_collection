@@ -1,1158 +1,673 @@
 {
   "info": {
-    "_postman_id": "5c2654dc-bbc3-4068-b105-1391b39b5a47",
-    "name": "Sistema de Gestão de Restaurantes",
-    "description": "API para gerenciamento de usuários - FIAP Postech Tech Challenge Fase 1. Suporta dois tipos de usuário: CLIENT e RESTAURANT_OWNER.\n\nContact Support:\n Name: FIAP Postech Arquitetura e Desenvolvimento em Java\n Email: contato@restaurante.com",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "36275815"
+    "_postman_id": "f42ae2f0-c7d3-4c7c-9d34-01ce4dd84eb5",
+    "name": "Restaurant Management API",
+    "description": "Coleção de testes para a API de gestão de restaurantes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
-  "item": [
-    {
-      "name": "api",
-      "item": [
-        {
-          "name": "v1",
-          "item": [
-            {
-              "name": "users",
-              "item": [
-                {
-                  "name": "{id}",
-                  "item": [
-                    {
-                      "name": "password",
-                      "item": [
-                        {
-                          "name": "Alterar senha",
-                          "request": {
-                            "method": "PUT",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"actualPassword\": \"senhaAntiga123\",\n  \"newPassword\": \"senhaNova456\"\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id/password",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id",
-                                "password"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário"
-                                }
-                              ]
-                            },
-                            "description": "Altera a senha do usuário em endpoint exclusivo, distinto da atualização de dados cadastrais"
-                          },
-                          "response": [
-                            {
-                              "name": "Senha alterada com sucesso",
-                              "originalRequest": {
-                                "method": "PUT",
-                                "header": [
-                                  {
-                                    "key": "Content-Type",
-                                    "value": "application/json"
-                                  }
-                                ],
-                                "body": {
-                                  "mode": "raw",
-                                  "raw": "{\n  \"actualPassword\": \"senhaAntiga123\",\n  \"newPassword\": \"senhaNova456\"\n}",
-                                  "options": {
-                                    "raw": {
-                                      "headerFamily": "json",
-                                      "language": "json"
-                                    }
-                                  }
-                                },
-                                "url": {
-                                  "raw": "{{baseUrl}}/api/v1/users/:id/password",
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
-                                  "path": [
-                                    "api",
-                                    "v1",
-                                    "users",
-                                    ":id",
-                                    "password"
-                                  ],
-                                  "variable": [
-                                    {
-                                      "key": "id",
-                                      "value": "1",
-                                      "description": "ID do usuário"
-                                    }
-                                  ]
-                                }
-                              },
-                              "status": "No Content",
-                              "code": 204,
-                              "_postman_previewlanguage": "text",
-                              "header": [],
-                              "cookie": [],
-                              "body": ""
-                            },
-                            {
-                              "name": "Senha atual inválida ou dados inválidos",
-                              "originalRequest": {
-                                "method": "PUT",
-                                "header": [
-                                  {
-                                    "key": "Content-Type",
-                                    "value": "application/json"
-                                  },
-                                  {
-                                    "key": "Accept",
-                                    "value": "application/json"
-                                  }
-                                ],
-                                "body": {
-                                  "mode": "raw",
-                                  "raw": "{\n  \"actualPassword\": \"senhaAntiga123\",\n  \"newPassword\": \"senhaNova456\"\n}",
-                                  "options": {
-                                    "raw": {
-                                      "headerFamily": "json",
-                                      "language": "json"
-                                    }
-                                  }
-                                },
-                                "url": {
-                                  "raw": "{{baseUrl}}/api/v1/users/:id/password",
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
-                                  "path": [
-                                    "api",
-                                    "v1",
-                                    "users",
-                                    ":id",
-                                    "password"
-                                  ],
-                                  "variable": [
-                                    {
-                                      "key": "id",
-                                      "value": "1",
-                                      "description": "ID do usuário"
-                                    }
-                                  ]
-                                }
-                              },
-                              "status": "Bad Request",
-                              "code": 400,
-                              "_postman_previewlanguage": "json",
-                              "header": [
-                                {
-                                  "key": "Content-Type",
-                                  "value": "application/json"
-                                }
-                              ],
-                              "cookie": [],
-                              "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                            },
-                            {
-                              "name": "Usuário não encontrado",
-                              "originalRequest": {
-                                "method": "PUT",
-                                "header": [
-                                  {
-                                    "key": "Content-Type",
-                                    "value": "application/json"
-                                  },
-                                  {
-                                    "key": "Accept",
-                                    "value": "application/json"
-                                  }
-                                ],
-                                "body": {
-                                  "mode": "raw",
-                                  "raw": "{\n  \"actualPassword\": \"senhaAntiga123\",\n  \"newPassword\": \"senhaNova456\"\n}",
-                                  "options": {
-                                    "raw": {
-                                      "headerFamily": "json",
-                                      "language": "json"
-                                    }
-                                  }
-                                },
-                                "url": {
-                                  "raw": "{{baseUrl}}/api/v1/users/:id/password",
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
-                                  "path": [
-                                    "api",
-                                    "v1",
-                                    "users",
-                                    ":id",
-                                    "password"
-                                  ],
-                                  "variable": [
-                                    {
-                                      "key": "id",
-                                      "value": "1",
-                                      "description": "ID do usuário"
-                                    }
-                                  ]
-                                }
-                              },
-                              "status": "Not Found",
-                              "code": 404,
-                              "_postman_previewlanguage": "json",
-                              "header": [
-                                {
-                                  "key": "Content-Type",
-                                  "value": "application/json"
-                                }
-                              ],
-                              "cookie": [],
-                              "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Buscar usuário",
-                      "request": {
-                        "method": "GET",
-                        "header": [
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users/:id",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            ":id"
-                          ],
-                          "variable": [
-                            {
-                              "key": "id",
-                              "value": "1",
-                              "description": "ID do usuário"
-                            }
-                          ]
-                        },
-                        "description": "Busca um usuário a partir do ID fornecido"
-                      },
-                      "response": [
-                        {
-                          "name": "Usuário encontrado",
-                          "originalRequest": {
-                            "method": "GET",
-                            "header": [
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "OK",
-                          "code": 200,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"id\": 520,\n  \"name\": \"string\",\n  \"email\": \"string\",\n  \"login\": \"string\",\n  \"userType\": \"string\",\n  \"lastChange\": \"2012-08-01T06:25:50.268Z\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}"
-                        },
-                        {
-                          "name": "Usuário não encontrado",
-                          "originalRequest": {
-                            "method": "GET",
-                            "header": [
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "Not Found",
-                          "code": 404,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Atualizar usuário",
-                      "request": {
-                        "method": "PUT",
-                        "header": [
-                          {
-                            "key": "Content-Type",
-                            "value": "application/json"
-                          },
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"name\": \"João Silva Atualizado\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                          "options": {
-                            "raw": {
-                              "headerFamily": "json",
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users/:id",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            ":id"
-                          ],
-                          "variable": [
-                            {
-                              "key": "id",
-                              "value": "1",
-                              "description": "ID do usuário a ser atualizado"
-                            }
-                          ]
-                        },
-                        "description": "Atualiza os dados de um usuário existente pelo seu ID"
-                      },
-                      "response": [
-                        {
-                          "name": "Usuário atualizado com sucesso",
-                          "originalRequest": {
-                            "method": "PUT",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"name\": \"João Silva Atualizado\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário a ser atualizado"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "OK",
-                          "code": 200,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"id\": 520,\n  \"name\": \"string\",\n  \"email\": \"string\",\n  \"login\": \"string\",\n  \"userType\": \"string\",\n  \"lastChange\": \"2012-08-01T06:25:50.268Z\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}"
-                        },
-                        {
-                          "name": "Dados inválidos",
-                          "originalRequest": {
-                            "method": "PUT",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"name\": \"João Silva Atualizado\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário a ser atualizado"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "Bad Request",
-                          "code": 400,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                        },
-                        {
-                          "name": "Usuário não encontrado",
-                          "originalRequest": {
-                            "method": "PUT",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"name\": \"João Silva Atualizado\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário a ser atualizado"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "Not Found",
-                          "code": 404,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                        },
-                        {
-                          "name": "E-mail já cadastrado",
-                          "originalRequest": {
-                            "method": "PUT",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"name\": \"João Silva Atualizado\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário a ser atualizado"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "Conflict",
-                          "code": 409,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                        }
-                      ]
-                    },
-                    {
-                      "name": "Deletar usuário",
-                      "request": {
-                        "method": "DELETE",
-                        "header": [
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users/:id",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            ":id"
-                          ],
-                          "variable": [
-                            {
-                              "key": "id",
-                              "value": "1",
-                              "description": "ID do usuário a ser deletado"
-                            }
-                          ]
-                        },
-                        "description": "Deleta um usuário a partir do ID fornecido"
-                      },
-                      "response": [
-                        {
-                          "name": "Usuário deletado com sucesso",
-                          "originalRequest": {
-                            "method": "DELETE",
-                            "header": [],
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário a ser deletado"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "No Content",
-                          "code": 204,
-                          "_postman_previewlanguage": "text",
-                          "header": [],
-                          "cookie": [],
-                          "body": ""
-                        },
-                        {
-                          "name": "Usuário não encontrado",
-                          "originalRequest": {
-                            "method": "DELETE",
-                            "header": [
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/users/:id",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "users",
-                                ":id"
-                              ],
-                              "variable": [
-                                {
-                                  "key": "id",
-                                  "value": "1",
-                                  "description": "ID do usuário a ser deletado"
-                                }
-                              ]
-                            }
-                          },
-                          "status": "Not Found",
-                          "code": 404,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "Listar usuários",
-                  "request": {
-                    "method": "GET",
-                    "header": [
-                      {
-                        "key": "Accept",
-                        "value": "application/json"
-                      }
-                    ],
-                    "url": {
-                      "raw": "{{baseUrl}}/api/v1/users?name=João",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "api",
-                        "v1",
-                        "users"
-                      ],
-                      "query": [
-                        {
-                          "key": "name",
-                          "value": "João",
-                          "description": "Filtrar por nome"
-                        }
-                      ]
-                    },
-                    "description": "Lista os usuários que estão cadastrados no sistema"
-                  },
-                  "response": [
-                    {
-                      "name": "Lista retornada com sucesso",
-                      "originalRequest": {
-                        "method": "GET",
-                        "header": [
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users?name=João",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users"
-                          ],
-                          "query": [
-                            {
-                              "description": "Filtrar por nome",
-                              "key": "name",
-                              "value": "João"
-                            }
-                          ]
-                        }
-                      },
-                      "status": "OK",
-                      "code": 200,
-                      "_postman_previewlanguage": "json",
-                      "header": [
-                        {
-                          "key": "Content-Type",
-                          "value": "application/json"
-                        }
-                      ],
-                      "cookie": [],
-                      "body": "[\n  {\n    \"id\": 513,\n    \"name\": \"string\",\n    \"email\": \"string\",\n    \"login\": \"string\",\n    \"userType\": \"string\",\n    \"lastChange\": \"1989-05-12T06:24:54.948Z\",\n    \"address\": {\n      \"street\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"city\": \"São Paulo\",\n      \"zipCode\": \"01310-100\"\n    }\n  },\n  {\n    \"id\": 9193,\n    \"name\": \"string\",\n    \"email\": \"string\",\n    \"login\": \"string\",\n    \"userType\": \"string\",\n    \"lastChange\": \"1958-07-23T23:58:54.814Z\",\n    \"address\": {\n      \"street\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"city\": \"São Paulo\",\n      \"zipCode\": \"01310-100\"\n    }\n  }\n]"
-                    }
-                  ]
-                },
-                {
-                  "name": "Criar usuário",
-                  "request": {
-                    "method": "POST",
-                    "header": [
-                      {
-                        "key": "Content-Type",
-                        "value": "application/json"
-                      },
-                      {
-                        "key": "Accept",
-                        "value": "application/json"
-                      }
-                    ],
-                    "body": {
-                      "mode": "raw",
-                      "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"login\": \"joaosilva\",\n  \"name\": \"João Silva\",\n  \"password\": \"senha123\",\n  \"userType\": \"CLIENT\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                      "options": {
-                        "raw": {
-                          "headerFamily": "json",
-                          "language": "json"
-                        }
-                      }
-                    },
-                    "url": {
-                      "raw": "{{baseUrl}}/api/v1/users",
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
-                      "path": [
-                        "api",
-                        "v1",
-                        "users"
-                      ]
-                    },
-                    "description": "Cria um novo usuário (CLIENT ou RESTAURANT_OWNER) no sistema"
-                  },
-                  "response": [
-                    {
-                      "name": "Usuário criado com sucesso",
-                      "originalRequest": {
-                        "method": "POST",
-                        "header": [
-                          {
-                            "key": "Content-Type",
-                            "value": "application/json"
-                          },
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"login\": \"joaosilva\",\n  \"name\": \"João Silva\",\n  \"password\": \"senha123\",\n  \"userType\": \"CLIENT\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                          "options": {
-                            "raw": {
-                              "headerFamily": "json",
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users"
-                          ]
-                        }
-                      },
-                      "status": "Created",
-                      "code": 201,
-                      "_postman_previewlanguage": "json",
-                      "header": [
-                        {
-                          "key": "Content-Type",
-                          "value": "application/json"
-                        }
-                      ],
-                      "cookie": [],
-                      "body": "{\n  \"id\": 520,\n  \"name\": \"string\",\n  \"email\": \"string\",\n  \"login\": \"string\",\n  \"userType\": \"string\",\n  \"lastChange\": \"2012-08-01T06:25:50.268Z\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}"
-                    },
-                    {
-                      "name": "Dados inválidos",
-                      "originalRequest": {
-                        "method": "POST",
-                        "header": [
-                          {
-                            "key": "Content-Type",
-                            "value": "application/json"
-                          },
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"login\": \"joaosilva\",\n  \"name\": \"João Silva\",\n  \"password\": \"senha123\",\n  \"userType\": \"CLIENT\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                          "options": {
-                            "raw": {
-                              "headerFamily": "json",
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users"
-                          ]
-                        }
-                      },
-                      "status": "Bad Request",
-                      "code": 400,
-                      "_postman_previewlanguage": "json",
-                      "header": [
-                        {
-                          "key": "Content-Type",
-                          "value": "application/json"
-                        }
-                      ],
-                      "cookie": [],
-                      "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                    },
-                    {
-                      "name": "E-mail já cadastrado",
-                      "originalRequest": {
-                        "method": "POST",
-                        "header": [
-                          {
-                            "key": "Content-Type",
-                            "value": "application/json"
-                          },
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"email\": \"joao.novo@email.com\",\n  \"login\": \"joaosilva\",\n  \"name\": \"João Silva\",\n  \"password\": \"senha123\",\n  \"userType\": \"CLIENT\",\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
-                          "options": {
-                            "raw": {
-                              "headerFamily": "json",
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/users",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "users"
-                          ]
-                        }
-                      },
-                      "status": "Conflict",
-                      "code": 409,
-                      "_postman_previewlanguage": "json",
-                      "header": [
-                        {
-                          "key": "Content-Type",
-                          "value": "application/json"
-                        }
-                      ],
-                      "cookie": [],
-                      "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "auth",
-              "item": [
-                {
-                  "name": "login",
-                  "item": [
-                    {
-                      "name": "Validar login",
-                      "request": {
-                        "method": "POST",
-                        "header": [
-                          {
-                            "key": "Content-Type",
-                            "value": "application/json"
-                          },
-                          {
-                            "key": "Accept",
-                            "value": "application/json"
-                          }
-                        ],
-                        "body": {
-                          "mode": "raw",
-                          "raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"senha123\"\n}",
-                          "options": {
-                            "raw": {
-                              "headerFamily": "json",
-                              "language": "json"
-                            }
-                          }
-                        },
-                        "url": {
-                          "raw": "{{baseUrl}}/api/v1/auth/login",
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
-                          "path": [
-                            "api",
-                            "v1",
-                            "auth",
-                            "login"
-                          ]
-                        },
-                        "description": "Verifica se login e senha são válidos consultando os dados no banco"
-                      },
-                      "response": [
-                        {
-                          "name": "Resultado da validação (válido ou inválido)",
-                          "originalRequest": {
-                            "method": "POST",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"senha123\"\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/auth/login",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "auth",
-                                "login"
-                              ]
-                            }
-                          },
-                          "status": "OK",
-                          "code": 200,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"valid\": true,\n  \"message\": \"string\",\n  \"userId\": 5697,\n  \"type\": \"string\"\n}"
-                        },
-                        {
-                          "name": "Dados inválidos",
-                          "originalRequest": {
-                            "method": "POST",
-                            "header": [
-                              {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                              },
-                              {
-                                "key": "Accept",
-                                "value": "application/json"
-                              }
-                            ],
-                            "body": {
-                              "mode": "raw",
-                              "raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"senha123\"\n}",
-                              "options": {
-                                "raw": {
-                                  "headerFamily": "json",
-                                  "language": "json"
-                                }
-                              }
-                            },
-                            "url": {
-                              "raw": "{{baseUrl}}/api/v1/auth/login",
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
-                              "path": [
-                                "api",
-                                "v1",
-                                "auth",
-                                "login"
-                              ]
-                            }
-                          },
-                          "status": "Bad Request",
-                          "code": 400,
-                          "_postman_previewlanguage": "json",
-                          "header": [
-                            {
-                              "key": "Content-Type",
-                              "value": "application/json"
-                            }
-                          ],
-                          "cookie": [],
-                          "body": "{\n  \"type\": \"https://D.jeYxFLi8TK0FnKRQpvqg9mUWFm20gDKpXW4XWV5aE4ZRPTX4eRosq\",\n  \"title\": \"string\",\n  \"status\": 2302,\n  \"detail\": \"string\",\n  \"instance\": \"http://DiukN.tvaniUIXAB,vw+JFYBWla488lSyIFEbumVAzLkmNEQlirtOfG.kp4YKKxbv7WpJ\",\n  \"properties\": {\n    \"key_0\": false,\n    \"key_1\": false,\n    \"key_2\": 5206\n  }\n}"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080"
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "id_usuario",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "id_tipo_usuario",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "restaurantId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "menuItemId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"joaosilva\",\n  \"password\": \"senha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@email.com\",\n  \"login\": \"joaosilva\",\n  \"password\": \"senha123\",\n  \"id_tipo_usuario\": 1,\n  \"address\": {\n    \"street\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01310-100\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users?name=João",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "João"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{id_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{id_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"João Silva Atualizado\",\n  \"email\": \"joao.atualizado@email.com\",\n  \"login\": \"joaosilva\",\n  \"password\": \"senha123\",\n  \"id_tipo_usuario\": 1,\n  \"address\": {\n    \"street\": \"Avenida Paulista\",\n    \"number\": \"456\",\n    \"city\": \"São Paulo\",\n    \"zipCode\": \"01311-000\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{id_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{id_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"senha123\",\n  \"newPassword\": \"novaSenha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{id_usuario}}/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{id_usuario}}",
+                "password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{id_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{id_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Types",
+      "item": [
+        {
+          "name": "Create User Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cliente\",\n  \"observation\": \"Usuário que realiza pedidos no sistema\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user-types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List User Types",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user-types",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user-types"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Type By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user-types/{{id_tipo_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user-types",
+                "{{id_tipo_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Type",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cliente Premium\",\n  \"observation\": \"Usuário com acesso administrativo para gerenciar restaurantes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user-types/{{id_tipo_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user-types",
+                "{{id_tipo_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User Type",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user-types/{{id_tipo_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user-types",
+                "{{id_tipo_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Associate User Type",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/users/{{id_usuario}}/type/{{id_tipo_usuario}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "{{id_usuario}}",
+                "type",
+                "{{id_tipo_usuario}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Restaurants",
+      "item": [
+        {
+          "name": "Create Restaurant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Sabor do Bairro\",\n  \"endereco\": \"Rua das Flores, 123\",\n  \"tipoCozinha\": \"Italiana\",\n  \"horarioFuncionamento\": \"Segunda a Domingo, 18:00 - 23:00\",\n  \"ownerId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Restaurants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Restaurant By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Restaurant",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Sabor do Bairro Atualizado\",\n  \"endereco\": \"Avenida Paulista, 987\",\n  \"tipoCozinha\": \"Brasileira\",\n  \"horarioFuncionamento\": \"Todos os dias, 12:00 - 23:00\",\n  \"ownerId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Restaurant",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "restaurants",
+                "{{restaurantId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Menu Items",
+      "item": [
+        {
+          "name": "Create Menu Item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Pizza Margherita\",\n  \"descricao\": \"Pizza artesanal com molho de tomate e mussarela\",\n  \"preco\": 39.9,\n  \"disponivelNoLocal\": true,\n  \"fotoPath\": \"/images/pizza-margherita.jpg\",\n  \"restaurantId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "menu-items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Menu Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/menu-items",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "menu-items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Menu Item By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Menu Item",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Pizza Margherita Especial\",\n  \"descricao\": \"Pizza artesanal com molho de tomate, mussarela e manjericão\",\n  \"preco\": 45.9,\n  \"disponivelNoLocal\": true,\n  \"fotoPath\": \"/images/pizza-margherita-especial.jpg\",\n  \"restaurantId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Menu Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/menu-items/{{menuItemId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "menu-items",
+                "{{menuItemId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
