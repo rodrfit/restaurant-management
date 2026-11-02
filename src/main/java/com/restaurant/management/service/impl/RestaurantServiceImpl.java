@@ -9,6 +9,7 @@ import com.restaurant.management.dto.response.RestaurantResponse;
 import com.restaurant.management.model.Restaurant;
 import com.restaurant.management.model.User;
 import com.restaurant.management.exception.UserNotFoundException;
+import com.restaurant.management.exception.RestaurantAlreadyExistsException;
 import com.restaurant.management.exception.RestaurantNotFoundException;
 
 import java.util.List;
@@ -26,6 +27,10 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public RestaurantResponse create(CreateRestaurantRequest request) {
+        if (request.ownerId() != null && repository.existsByOwnerId(request.ownerId())) {
+            throw new RestaurantAlreadyExistsException();
+        }
+
         User owner = userRepository.findById(request.ownerId())
                 .orElseThrow(() -> new UserNotFoundException(request.ownerId()));
 
@@ -65,6 +70,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurant.setHorarioFuncionamento(request.horarioFuncionamento());
 
         if (request.ownerId() != null && (restaurant.getOwner() == null || !restaurant.getOwner().getId().equals(request.ownerId()))) {
+            if (repository.existsByOwnerId(request.ownerId())) {
+                throw new RestaurantAlreadyExistsException();
+            }
             User owner = userRepository.findById(request.ownerId())
                     .orElseThrow(() -> new UserNotFoundException(request.ownerId()));
             restaurant.setOwner(owner);
