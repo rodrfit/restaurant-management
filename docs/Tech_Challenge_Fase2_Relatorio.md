@@ -25,7 +25,7 @@ Repositório: https://github.com/rodrfit/restaurant-management
 
 Este relatório descreve a solução desenvolvida para a Fase 2 do Tech Challenge da Pós Tech em Arquitetura e Desenvolvimento Java (FIAP). O desafio propõe a construção de um sistema de gestão compartilhado para um grupo de restaurantes da região, motivado pelo alto custo de sistemas individuais. Os estabelecimentos usam uma plataforma única, e os clientes escolhem o restaurante pela comida oferecida.
 
-Por limitação de recursos, a entrega foi acordada em fases. A Fase 1 entregou o módulo de usuários: cadastro, atualização, exclusão, busca por nome, última alteração, e-mail único, validação de login e troca de senha em endpoint separado. Nesta Fase 2 o escopo acrescenta a gestão de tipos de usuário, a associação do tipo a um usuário existente, o cadastro de restaurantes e o cadastro dos itens de cardápio.
+A Fase 1 entregou o módulo de usuários: cadastro, atualização, exclusão, busca por nome, última alteração, e-mail único, validação de login e troca de senha em endpoint separado. Nesta Fase 2 o escopo acrescenta a gestão de tipos de usuário, a associação do tipo a um usuário existente, o cadastro de restaurantes e o cadastro dos itens de cardápio.
 
 A aplicação permanece em Java 21 com Spring Boot 4.1, MySQL 8, Docker Compose, Swagger/OpenAPI, coleção Postman e erros no padrão ProblemDetail (RFC 7807). A API continua versionada em `/api/v1`. O código foi reorganizado em Clean Architecture (domain, application e infrastructure).
 
