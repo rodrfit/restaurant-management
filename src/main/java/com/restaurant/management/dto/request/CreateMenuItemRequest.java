@@ -10,6 +10,9 @@ import jakarta.validation.constraints.Size;
 @Schema(description = "Dados para criação de um novo item do menu")
 public record CreateMenuItemRequest(
 
+        @Schema(description = "ID do item do menu", example = "1")
+        Long id,
+
         @NotBlank(message = ExceptionMessages.NAME_REQUIRED)
         @Size(max = 255, message = ExceptionMessages.NAME_MAX_LENGTH)
         @Schema(description = "Nome do item do menu", example = "Pizza Margherita")
@@ -36,4 +39,15 @@ public record CreateMenuItemRequest(
         @NotNull(message = ExceptionMessages.RESTAURANT_ID_REQUIRED)
         @Schema(description = "ID do restaurante responsável pelo item", example = "1")
         Long restaurantId
-) {}
+) {
+    public CreateMenuItemRequest(
+            String nome,
+            String descricao,
+            Double preco,
+            Boolean disponivelNoLocal,
+            String fotoPath,
+            Long restaurantId
+    ) {
+        this(null, nome, descricao, preco, disponivelNoLocal, fotoPath, restaurantId);
+    }
+}

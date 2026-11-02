@@ -61,6 +61,14 @@ public class RestaurantControllerV1 {
                             mediaType = "application/json",
                             schema = @Schema(implementation = ProblemDetail.class)
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Retaurante já cadastrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
             )
     })
     public ResponseEntity<RestaurantResponse> create(@RequestBody @Valid CreateRestaurantRequest request) {

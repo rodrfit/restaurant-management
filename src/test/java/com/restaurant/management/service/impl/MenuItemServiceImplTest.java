@@ -5,12 +5,15 @@ import com.restaurant.management.model.MenuItem;
 import com.restaurant.management.model.Restaurant;
 import com.restaurant.management.repository.MenuItemRepository;
 import com.restaurant.management.repository.RestaurantRepository;
+import com.restaurant.management.exception.MenuItemAlreadyExistsException;
+import com.restaurant.management.exception.RestaurantNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 class MenuItemServiceImplTest {
@@ -39,5 +42,31 @@ class MenuItemServiceImplTest {
         assertEquals("Pizza", response.nome());
         assertEquals(10L, response.id());
         assertEquals(1L, response.restaurantId());
+    }
+
+    @Test
+    void testCreateMenuItemThrowsConflictWhenIdAlreadyExists() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(1L);
+
+        Mockito.when(restaurantRepository.findById(1L)).thenReturn(Optional.of(restaurant));
+        Mockito.when(menuItemRepository.existsById(10L)).thenReturn(true);
+
+        CreateMenuItemRequest request = new CreateMenuItemRequest(
+                10L, "Pizza", "Deliciosa pizza", 50.0, true, "/img/pizza.png", 1L);
+
+        var exception = assertThrows(MenuItemAlreadyExistsException.class, () -> service.create(request));
+
+        assertEquals("Item de menu ja cadastrado", exception.getMessage());
+    }
+
+    @Test
+    void testCreateMenuItemThrowsNotFoundWhenRestaurantIdIsMissing() {
+        CreateMenuItemRequest request = new CreateMenuItemRequest(
+                "Pizza", "Deliciosa pizza", 50.0, true, "/img/pizza.png", null);
+
+        var exception = assertThrows(RestaurantNotFoundException.class, () -> service.create(request));
+
+        assertEquals("Restaurante não encontrado com id: null", exception.getMessage());
     }
 }
