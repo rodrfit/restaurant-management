@@ -3,6 +3,7 @@ package com.restaurant.management.service.impl;
 import com.restaurant.management.dto.request.CreateMenuItemRequest;
 import com.restaurant.management.dto.response.MenuItemResponse;
 import com.restaurant.management.exception.MenuItemAlreadyExistsException;
+import com.restaurant.management.exception.MenuItemNotFoundException;
 import com.restaurant.management.exception.RestaurantNotFoundException;
 import com.restaurant.management.model.MenuItem;
 import com.restaurant.management.model.Restaurant;
@@ -38,7 +39,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     public MenuItemResponse findById(Long id) {
         return menuItemRepository.findById(id)
                 .map(this::toResponse)
-                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+                .orElseThrow(() -> new MenuItemNotFoundException(id));
     }
 
     @Override
@@ -72,10 +73,10 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public MenuItemResponse update(Long id, CreateMenuItemRequest request) {
         MenuItem menuItem = menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+                .orElseThrow(() -> new MenuItemNotFoundException(id));
 
         Restaurant restaurant = restaurantRepository.findById(request.restaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                .orElseThrow(() -> new RestaurantNotFoundException(request.restaurantId()));
 
         menuItem.setNome(request.nome());
         menuItem.setDescricao(request.descricao());
@@ -90,6 +91,9 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public void delete(Long id) {
+        if (!menuItemRepository.existsById(id)) {
+            throw new MenuItemNotFoundException(id);
+        }
         menuItemRepository.deleteById(id);
     }
 
