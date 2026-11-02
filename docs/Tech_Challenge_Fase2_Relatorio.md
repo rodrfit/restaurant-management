@@ -327,7 +327,7 @@ As tags são Autenticação, Usuários, Tipos de Usuário, Restaurantes e Itens 
 
 ## 7. Coleção Postman
 
-A coleção da Fase 2 está em `docs/postman/RestaurantManagement.fase2.2.postman_collection.json`. A variável `baseUrl` vale `http://localhost:8080`.
+A coleção da Fase 2 está em `docs/postman/restaurant_management.postman_collection`. A variável `baseUrl` vale `http://localhost:8080`.
 
 Pastas e requisições:
 
@@ -382,7 +382,7 @@ O healthcheck do Compose usa o usuário `root` e a senha `root`. `MYSQL_ROOT_PAS
 3. Subir aplicação e banco: `docker compose up --build -d`.
 4. Aguardar o MySQL ficar saudável e a aplicação responder em http://localhost:8080.
 5. Abrir o Swagger em http://localhost:8080/swagger-ui.html.
-6. Importar `docs/postman/RestaurantManagement.fase2.2.postman_collection.json` e executar os fluxos.
+6. Importar `docs/postman/restaurant_management.postman_collection` e executar os fluxos.
 
 Para rodar só o banco no Docker e a aplicação na máquina:
 
@@ -424,7 +424,7 @@ O ponto de atenção na execução é o banco criado na Fase 1: a coluna `users_
 
 - Código-fonte (Spring Boot / Java 21)
 - `docker-compose.yml`, `Dockerfile` e `.env.example`
-- Coleção Postman em `docs/postman/RestaurantManagement.fase2.2.postman_collection.json`
+- Coleção Postman em `docs/postman/restaurant_management.postman_collection`
 - Swagger em http://localhost:8080/swagger-ui.html e http://localhost:8080/v3/api-docs
 - Testes em `src/test/java`
 - Este relatório

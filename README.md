@@ -257,7 +257,7 @@ As tags são Autenticação, Usuários, Tipos de Usuário, Restaurantes e Itens 
 
 ## 📮 7. Coleção Postman
 
-A coleção da Fase 2 está em `docs/postman/RestaurantManagement.fase2.2.postman_collection.json`.
+A coleção da Fase 2 está em `docs/postman/restaurant_management.postman_collection`.
 
 Ela cobre autenticação, usuários, tipos de usuário (incluindo a associação `PUT /api/v1/users/{id}/type/{typeId}`), restaurantes e itens de cardápio. A variável `baseUrl` aponta para `http://localhost:8080`.
 
@@ -319,7 +319,7 @@ Há testes de serviço (usuário, tipo, restaurante, cardápio e login), de cont
 
 * Código-fonte Spring Boot / Java 21
 * `docker-compose.yml`, `Dockerfile` e `.env.example`
-* Coleção Postman em `docs/postman/RestaurantManagement.fase2.2.postman_collection.json`
+* Coleção Postman em `docs/postman/restaurant_management.postman_collection`
 * Swagger em tempo de execução
 * Relatório da Fase 2: `docs/Tech_Challenge_Fase2_Relatorio.md`
 * Este README
