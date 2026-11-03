@@ -399,7 +399,7 @@ A aplicação local conecta em `jdbc:mysql://localhost:3307/restaurant_managemen
 
 Os testes ficam em `src/test/java` e usam JUnit 5 e Mockito. O teste de contexto sobe o Spring com H2 em memória e não depende do MySQL. Execução: `./mvnw test`.
 
-O JaCoCo está cobrindo 80% do código. O `./mvnw clean verify` confere esse mínimo sobre as instruções e falha se a cobertura ficar abaixo. O relatório HTML fica em `target/site/jacoco/index.html`.
+O JaCoCo exige que pelo menos 80% das instruções do código estejam cobertas por testes. Abaixo desse limite, o `./mvnw clean verify` falha e o build não conclui com sucesso. O relatório HTML fica em `target/site/jacoco/index.html`.
 
 Classes:
 
@@ -429,7 +429,7 @@ O ponto de atenção na execução é o banco criado na Fase 1: a coluna `users_
 - `docker-compose.yml`, `Dockerfile` e `.env.example`
 - Coleção Postman em `docs/postman/restaurant_management.postman_collection`
 - Swagger em http://localhost:8080/swagger-ui.html e http://localhost:8080/v3/api-docs
-- Testes em `src/test/java`, com JaCoCo cobrindo 80% do código
+- Testes em `src/test/java`, com JaCoCo exigindo no mínimo 80% de cobertura para o build passar
 - Este relatório
 - README do repositório, com o resumo de execução
 - Vídeo de apresentação da solução
