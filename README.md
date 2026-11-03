@@ -68,6 +68,7 @@ src/main/java/com/restaurant/management/
 * 🔐 **Spring Security Crypto** (BCrypt)
 * 📘 **Springdoc OpenAPI 3**
 * 🧰 **Lombok** e **Jakarta Bean Validation**
+* 📊 **JaCoCo** e **ArchUnit** (cobertura mínima de 80% e testes de arquitetura)
 * 🐳 **Docker** e **Docker Compose**
 
 ## 🔌 Endpoints
@@ -226,13 +227,43 @@ docker compose up -d mysql
 
 A aplicação local usa `jdbc:mysql://localhost:3307/restaurant_management` com o usuário `management` / `management123`, salvo se `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` estiverem definidas.
 
-### 🧪 Testes
+### 🧪 Testes e Cobertura (JaCoCo)
+
+Para rodar a suíte de testes e gerar o relatório de cobertura do **JaCoCo**:
 
 ```bash
-./mvnw test
+./mvnw clean test
+```
+
+Para rodar os testes e também validar a regra de cobertura mínima de **80% de instruções** (`jacoco:check`):
+
+```bash
+./mvnw clean verify
 ```
 
 Os testes usam H2 em memória (`src/test/resources/application.yml`) e não dependem do MySQL.
+
+#### 📊 Como visualizar o relatório do JaCoCo
+
+Após executar `./mvnw clean test` (ou `./mvnw clean verify`), o relatório é gerado no diretório `target/site/jacoco/`:
+
+* **Relatório visual (HTML):** `target/site/jacoco/index.html`
+* **Relatório CSV / XML:** `target/site/jacoco/jacoco.csv` e `target/site/jacoco/jacoco.xml`
+
+Para abrir o relatório HTML diretamente no navegador pelo terminal:
+
+* **Linux:**
+  ```bash
+  xdg-open target/site/jacoco/index.html
+  ```
+* **macOS:**
+  ```bash
+  open target/site/jacoco/index.html
+  ```
+* **Windows (PowerShell / CMD):**
+  ```powershell
+  start target/site/jacoco/index.html
+  ```
 
 ## 📖 Documentação da API
 
