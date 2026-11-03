@@ -15,9 +15,9 @@ Autores:
 - Lucas Brisolla
 - Rodrigo Fittipaldi
 
-Data: 02/11/2026
+Data: 03/11/2026
 
-Repositório: https://github.com/rodrfit/restaurant-management
+Repositório: [https://github.com/rodrfit/restaurant-management](https://github.com/rodrfit/restaurant-management)
 
 ---
 
@@ -121,7 +121,7 @@ O tipo do usuário é a entidade `UserType`, ligada ao usuário pela coluna `use
 | endereco | String | Obrigatório |
 | tipo_cozinha | String | Obrigatório |
 | horario_funcionamento | String | Obrigatório |
-| owner_id | Long | Usuário responsável pelo restaurante |
+| owner_id | Long | Usuário responsável. Cada usuário é dono de no máximo um restaurante |
 
 ### 4.4 Item de cardápio (`menu_items`)
 
@@ -287,7 +287,7 @@ Credencial inválida também responde `200`, com `valid: false` e a mensagem "Lo
 }
 ```
 
-Resposta `201` devolve os mesmos campos mais `id`. Dono inexistente responde `404`. Campo obrigatório ausente responde `400`.
+Resposta `201` devolve os mesmos campos mais `id`. Dono inexistente responde `404`. Campo obrigatório ausente responde `400`. Se o dono já tiver um restaurante, a criação ou a troca de dono responde `409`.
 
 ### 5.7 Item de cardápio (POST /api/v1/menu-items)
 
@@ -302,7 +302,7 @@ Resposta `201` devolve os mesmos campos mais `id`. Dono inexistente responde `40
 }
 ```
 
-`fotoPath` é apenas o caminho. `disponivelNoLocal` indica consumo só no restaurante. Restaurante inexistente responde `404`.
+`fotoPath` é apenas o caminho. `disponivelNoLocal` indica consumo só no restaurante. Restaurante inexistente responde `404`. Se o corpo informar um `id` que já existe, a criação responde `409`.
 
 ### 5.8 Erro padronizado
 
@@ -377,7 +377,7 @@ O healthcheck do Compose usa o usuário `root` e a senha `root`. `MYSQL_ROOT_PAS
 
 ### 9.2 Passo a passo
 
-1. Clonar `https://github.com/rodrfit/restaurant-management.git` e entrar na pasta.
+1. Clonar [https://github.com/rodrfit/restaurant-management.git](https://github.com/rodrfit/restaurant-management.git) e entrar na pasta.
 2. Copiar o exemplo: `cp .env.example .env`.
 3. Subir aplicação e banco: `docker compose up --build -d`.
 4. Aguardar o MySQL ficar saudável e a aplicação responder em http://localhost:8080.
@@ -399,15 +399,18 @@ A aplicação local conecta em `jdbc:mysql://localhost:3307/restaurant_managemen
 
 Os testes ficam em `src/test/java` e usam JUnit 5 e Mockito. O teste de contexto sobe o Spring com H2 em memória e não depende do MySQL. Execução: `./mvnw test`.
 
+O JaCoCo exige que pelo menos 80% das instruções do código estejam cobertas por testes. Abaixo desse limite, o `./mvnw clean verify` falha e o build não conclui com sucesso. O relatório HTML fica em `target/site/jacoco/index.html`.
+
 Classes:
 
 - `UserServiceImplTest` — cadastro, busca, atualização, senha, exclusão e associação de tipo
 - `UserTypeServiceImplTest` — criação e atualização de tipo
-- `RestaurantServiceImplTest` — criação de restaurante com dono
-- `MenuItemServiceImplTest` — criação de item ligado a um restaurante
+- `RestaurantServiceImplTest` — criação de restaurante, dono inexistente e dono que já possui restaurante
+- `MenuItemServiceImplTest` — criação de item, restaurante inexistente e id já existente
 - `AuthServiceImplTest` — login válido e inválido
 - `BcryptPasswordHasherTest` — hash e conferência da senha
-- `AuthControllerTest`, `RestaurantControllerTest`, `MenuItemControllerTest` — delegação dos controllers
+- `AuthControllerTest`, `UserControllerTest`, `UserTypeControllerTest`, `RestaurantControllerTest`, `MenuItemControllerTest` — delegação dos controllers
+- `PersistenceMapperAndAdapterTest` — mapeamento e adapters de persistência
 - `GlobalExceptionHandlerTest` — ProblemDetail (400, 404, 409 e 500)
 - `ArchitectureTest` — regra de dependência entre as camadas
 - `ManagementApplicationTests` — carga do contexto
@@ -426,13 +429,33 @@ O ponto de atenção na execução é o banco criado na Fase 1: a coluna `users_
 - `docker-compose.yml`, `Dockerfile` e `.env.example`
 - Coleção Postman em `docs/postman/restaurant_management.postman_collection`
 - Swagger em http://localhost:8080/swagger-ui.html e http://localhost:8080/v3/api-docs
-- Testes em `src/test/java`
+- Testes em `src/test/java`, com JaCoCo exigindo no mínimo 80% de cobertura para o build passar
 - Este relatório
 - README do repositório, com o resumo de execução
+- Vídeo de apresentação da solução
+- Três documentos complementares com o fluxo completo (CRUD) de tipos de usuário, restaurante e itens de cardápio
 
-Repositório: https://github.com/rodrfit/restaurant-management
+## 13. Repositório
 
-## 13. Referências
+O código da Fase 2 está no repositório público do projeto:
+
+[https://github.com/rodrfit/restaurant-management](https://github.com/rodrfit/restaurant-management)
+
+## 14. Vídeo
+
+O Tech Challenge pede um vídeo da solução. A apresentação está publicada em:
+
+[https://www.youtube.com/watch?v=wLAZZFPcrb8](https://www.youtube.com/watch?v=wLAZZFPcrb8)
+
+## 15. Documentos complementares
+
+O fluxo completo (CRUD) de cada cadastro foi registrado em três documentos separados. Eles acompanham este relatório e entram à parte na versão em documento de texto.
+
+- Tipos de Usuários
+- Cadastro de Restaurante
+- Itens do Menu
+
+## 16. Referências
 
 - SPRING. Spring Boot Reference Documentation. https://docs.spring.io/spring-boot/
 - IETF. RFC 7807 — Problem Details for HTTP APIs. https://datatracker.ietf.org/doc/html/rfc7807
