@@ -3,7 +3,9 @@ package com.restaurant.management.infrastructure.web;
 import com.restaurant.management.domain.exception.EmailAlreadyExistsException;
 import com.restaurant.management.domain.exception.ExceptionMessages;
 import com.restaurant.management.domain.exception.InvalidPasswordException;
+import com.restaurant.management.domain.exception.MenuItemAlreadyExistsException;
 import com.restaurant.management.domain.exception.MenuItemNotFoundException;
+import com.restaurant.management.domain.exception.RestaurantAlreadyExistsException;
 import com.restaurant.management.domain.exception.RestaurantNotFoundException;
 import com.restaurant.management.domain.exception.UserNotFoundException;
 import com.restaurant.management.domain.exception.UserTypeAlreadyExistsException;
@@ -17,6 +19,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -90,6 +93,16 @@ class GlobalExceptionHandlerTest {
         }
 
         @Test
+        @DisplayName("deve retornar 409 para restaurante ou item de menu já cadastrado")
+        void shouldReturnConflictForRestaurantAndMenuItemAlreadyExists() {
+            ProblemDetail rDetail = handler.handleRestaurantAlreadyExists(new RestaurantAlreadyExistsException());
+            assertEquals(HttpStatus.CONFLICT.value(), rDetail.getStatus());
+
+            ProblemDetail mDetail = handler.handleMenuItemAlreadyExists(new MenuItemAlreadyExistsException(10L));
+            assertEquals(HttpStatus.CONFLICT.value(), mDetail.getStatus());
+        }
+
+        @Test
         @DisplayName("deve retornar 400 para senha inválida")
         void shouldReturnBadRequestForInvalidPassword() {
             ProblemDetail detail = handler.handleInvalidPassword(
@@ -124,13 +137,23 @@ class GlobalExceptionHandlerTest {
         }
 
         @Test
+        @DisplayName("deve retornar 400 para MethodArgumentTypeMismatchException")
+        void shouldReturnBadRequestForTypeMismatch() {
+            MethodArgumentTypeMismatchException ex = mock(MethodArgumentTypeMismatchException.class);
+            ProblemDetail detail = handler.handleTypeMismatch(ex);
+
+            assertEquals(HttpStatus.BAD_REQUEST.value(), detail.getStatus());
+            assertEquals("Requisição inválida. ID informado em formato incorreto", detail.getDetail());
+        }
+
+        @Test
         @DisplayName("deve retornar 409 com mensagem genérica para violação de integridade no banco")
         void shouldReturnConflictForDataIntegrityViolation() {
             ProblemDetail detail = handler.handleDataIntegrityViolation(
                     new DataIntegrityViolationException("duplicate"));
 
             assertEquals(HttpStatus.CONFLICT.value(), detail.getStatus());
-            assertEquals("Operação viola uma restrição de integridade (registro duplicado ou em uso)",
+            assertEquals("Dados duplicados ou inválidos (e-mail/login)",
                     detail.getDetail());
         }
 

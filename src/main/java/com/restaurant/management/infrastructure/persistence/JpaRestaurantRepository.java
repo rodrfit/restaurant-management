@@ -21,4 +21,6 @@ public interface JpaRestaurantRepository extends JpaRepository<RestaurantEntity,
     @EntityGraph(attributePaths = {"owner", "owner.userType"})
     @Override
     List<RestaurantEntity> findAll();
+
+    boolean existsByOwnerId(Long ownerId);
 }

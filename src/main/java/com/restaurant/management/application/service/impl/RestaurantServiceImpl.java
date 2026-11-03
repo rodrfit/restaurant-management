@@ -2,6 +2,7 @@ package com.restaurant.management.application.service.impl;
 
 import com.restaurant.management.application.command.SaveRestaurantCommand;
 import com.restaurant.management.application.service.RestaurantService;
+import com.restaurant.management.domain.exception.RestaurantAlreadyExistsException;
 import com.restaurant.management.domain.exception.RestaurantNotFoundException;
 import com.restaurant.management.domain.exception.UserNotFoundException;
 import com.restaurant.management.domain.model.Restaurant;
@@ -36,6 +37,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional
     @Override
     public Restaurant create(SaveRestaurantCommand command) {
+        if (Objects.nonNull(command.ownerId()) && repository.existsByOwnerId(command.ownerId())) {
+            throw new RestaurantAlreadyExistsException();
+        }
+
         User owner = userRepository.findById(command.ownerId())
                 .orElseThrow(() -> new UserNotFoundException(command.ownerId()));
 
@@ -61,6 +66,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         if (Objects.nonNull(command.ownerId())
                 && (Objects.isNull(restaurant.getOwner()) || !restaurant.getOwner().getId().equals(command.ownerId()))) {
+            if (repository.existsByOwnerId(command.ownerId())) {
+                throw new RestaurantAlreadyExistsException();
+            }
             User owner = userRepository.findById(command.ownerId())
                     .orElseThrow(() -> new UserNotFoundException(command.ownerId()));
             restaurant.setOwner(owner);

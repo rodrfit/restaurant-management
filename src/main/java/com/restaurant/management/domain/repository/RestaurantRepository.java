@@ -17,6 +17,8 @@ public interface RestaurantRepository {
 
     boolean existsById(Long id);
 
+    boolean existsByOwnerId(Long ownerId);
+
     List<Restaurant> findByNameContainingIgnoreCase(String name);
 
     Optional<Restaurant> findByNameIgnoreCase(String name);

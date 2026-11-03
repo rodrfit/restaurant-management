@@ -2,6 +2,8 @@
 
 > Pós-Graduação em Arquitetura e Desenvolvimento Java — FIAP / Postech
 
+API REST para um sistema compartilhado de gestão de restaurantes. Nesta fase o serviço passa a cadastrar tipos de usuário, associá-los a usuários existentes, cadastrar restaurantes e os itens de cardápio vendidos por cada estabelecimento.
+
 ## 👨‍💻 Autores
 
 * **Marcos Ruiz Freire** (`marcosruizfreire@gmail.com`)
@@ -66,7 +68,18 @@ src/main/java/com/restaurant/management/
     └── config/         # OpenApiConfig
 ```
 
-## 🧩 4. Modelagem
+## 🛠️ Tecnologias
+
+* ☕ **Java 21**
+* 🍃 **Spring Boot 4.1** (Web, Data JPA, Validation)
+* 🐬 **MySQL 8.0** em execução; **H2** nos testes
+* 🔐 **Spring Security Crypto** (BCrypt)
+* 📘 **Springdoc OpenAPI 3**
+* 🧰 **Lombok** e **Jakarta Bean Validation**
+* 📊 **JaCoCo** e **ArchUnit** (cobertura mínima de 80% e testes de arquitetura)
+* 🐳 **Docker** e **Docker Compose**
+
+🧩 4. Modelagem
 
 O tipo do usuário é a entidade `UserType`, associada ao usuário por `user_type_id`. Não há hierarquia `Client` / `RestaurantOwner`. O endereço do usuário é um objeto embutido.
 
@@ -308,14 +321,46 @@ docker compose up -d mysql
 A aplicação local usa `jdbc:mysql://localhost:3307/restaurant_management` com o usuário `management` / `management123`, salvo se `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` estiverem definidas.
 
 ## 🧪 9. Testes
+### 🧪 Testes e Cobertura (JaCoCo)
+
+Para rodar a suíte de testes e gerar o relatório de cobertura do **JaCoCo**:
 
 ```bash
-./mvnw test
+./mvnw clean test
+```
+Para rodar os testes e também validar a regra de cobertura mínima de **80% de instruções** (`jacoco:check`):
+
+```bash
+./mvnw clean verify
 ```
 
 Os testes usam JUnit 5 e Mockito. O contexto Spring sobe com H2 (`src/test/resources/application.yml`) e não depende do MySQL.
 
 Há testes de serviço (usuário, tipo, restaurante, cardápio e login), de controller, do hash BCrypt, do `GlobalExceptionHandler`, de carga de contexto e o `ArchitectureTest` com ArchUnit.
+
+#### 📊 Como visualizar o relatório do JaCoCo
+
+Após executar `./mvnw clean test` (ou `./mvnw clean verify`), o relatório é gerado no diretório `target/site/jacoco/`:
+
+* **Relatório visual (HTML):** `target/site/jacoco/index.html`
+* **Relatório CSV / XML:** `target/site/jacoco/jacoco.csv` e `target/site/jacoco/jacoco.xml`
+
+Para abrir o relatório HTML diretamente no navegador pelo terminal:
+
+* **Linux:**
+  ```bash
+  xdg-open target/site/jacoco/index.html
+  ```
+* **macOS:**
+  ```bash
+  open target/site/jacoco/index.html
+  ```
+* **Windows (PowerShell / CMD):**
+  ```powershell
+  start target/site/jacoco/index.html
+  ```
+
+## 📖 Documentação da API
 
 ## 📦 10. Artefatos
 
