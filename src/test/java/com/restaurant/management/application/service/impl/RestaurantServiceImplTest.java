@@ -1,6 +1,7 @@
 package com.restaurant.management.application.service.impl;
 
 import com.restaurant.management.application.command.SaveRestaurantCommand;
+import com.restaurant.management.domain.exception.RestaurantAlreadyExistsException;
 import com.restaurant.management.domain.exception.RestaurantNotFoundException;
 import com.restaurant.management.domain.exception.UserNotFoundException;
 import com.restaurant.management.domain.model.Restaurant;
@@ -67,5 +68,50 @@ class RestaurantServiceImplTest {
 
         assertThrows(RestaurantNotFoundException.class, () -> service.delete(9L));
         verify(restaurantRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void testFindAllFindByIdUpdateAndDeleteSuccess() {
+        User oldOwner = new User();
+        oldOwner.setId(1L);
+        User newOwner = new User();
+        newOwner.setId(5L);
+
+        Restaurant existing = new Restaurant();
+        existing.setId(10L);
+        existing.setNome("Antigo");
+        existing.setOwner(oldOwner);
+
+        Mockito.when(restaurantRepository.findAll()).thenReturn(java.util.List.of(existing));
+        Mockito.when(restaurantRepository.findById(10L)).thenReturn(Optional.of(existing));
+        Mockito.when(userRepository.findById(5L)).thenReturn(Optional.of(newOwner));
+        Mockito.when(restaurantRepository.save(any(Restaurant.class))).thenAnswer(i -> i.getArgument(0));
+        Mockito.when(restaurantRepository.existsById(10L)).thenReturn(true);
+
+        assertEquals(1, service.findAll().size());
+        assertEquals("Antigo", service.findById(10L).getNome());
+
+        Restaurant updated = service.update(10L, command);
+        assertEquals("Restaurante Central", updated.getNome());
+        assertEquals(5L, updated.getOwner().getId());
+
+        service.delete(10L);
+        verify(restaurantRepository).deleteById(10L);
+    }
+
+    @Test
+    void testCreateAndUpdateRestaurantDuplicateOwnerThrows() {
+        Mockito.when(restaurantRepository.existsByOwnerId(5L)).thenReturn(true);
+
+        assertThrows(RestaurantAlreadyExistsException.class, () -> service.create(command));
+
+        Restaurant existing = new Restaurant();
+        existing.setId(10L);
+        User oldOwner = new User();
+        oldOwner.setId(1L);
+        existing.setOwner(oldOwner);
+        Mockito.when(restaurantRepository.findById(10L)).thenReturn(Optional.of(existing));
+
+        assertThrows(RestaurantAlreadyExistsException.class, () -> service.update(10L, command));
     }
 }

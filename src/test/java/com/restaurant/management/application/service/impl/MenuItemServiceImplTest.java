@@ -1,6 +1,7 @@
 package com.restaurant.management.application.service.impl;
 
 import com.restaurant.management.application.command.SaveMenuItemCommand;
+import com.restaurant.management.domain.exception.MenuItemAlreadyExistsException;
 import com.restaurant.management.domain.exception.MenuItemNotFoundException;
 import com.restaurant.management.domain.exception.RestaurantNotFoundException;
 import com.restaurant.management.domain.model.MenuItem;
@@ -95,5 +96,30 @@ class MenuItemServiceImplTest {
 
         assertThrows(MenuItemNotFoundException.class, () -> service.delete(3L));
         verify(menuItemRepository, never()).deleteById(any());
+    }
+
+    @Test
+    void testCreateMenuItemDuplicateIdAndNullRestaurantIdThrows() {
+        Mockito.when(menuItemRepository.existsById(10L)).thenReturn(true);
+
+        SaveMenuItemCommand dupCommand = new SaveMenuItemCommand(
+                10L, "Pizza", "Deliciosa pizza", 50.0, true, "/img/pizza.png", 1L);
+        assertThrows(MenuItemAlreadyExistsException.class, () -> service.create(dupCommand));
+
+        SaveMenuItemCommand nullRestCommand = new SaveMenuItemCommand(
+                null, "Pizza", "Deliciosa pizza", 50.0, true, "/img/pizza.png", null);
+        assertThrows(RestaurantNotFoundException.class, () -> service.create(nullRestCommand));
+    }
+
+    @Test
+    void testFindAllAndFindByIdSuccess() {
+        MenuItem item = new MenuItem();
+        item.setId(1L);
+        item.setNome("Pizza");
+        Mockito.when(menuItemRepository.findAll()).thenReturn(java.util.List.of(item));
+        Mockito.when(menuItemRepository.findById(1L)).thenReturn(Optional.of(item));
+
+        assertEquals(1, service.findAll().size());
+        assertEquals("Pizza", service.findById(1L).getNome());
     }
 }

@@ -2,6 +2,7 @@ package com.restaurant.management.application.service.impl;
 
 import com.restaurant.management.application.command.SaveMenuItemCommand;
 import com.restaurant.management.application.service.MenuItemService;
+import com.restaurant.management.domain.exception.MenuItemAlreadyExistsException;
 import com.restaurant.management.domain.exception.MenuItemNotFoundException;
 import com.restaurant.management.domain.exception.RestaurantNotFoundException;
 import com.restaurant.management.domain.model.MenuItem;
@@ -35,6 +36,12 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Transactional
     @Override
     public MenuItem create(SaveMenuItemCommand command) {
+        if (command.id() != null && menuItemRepository.existsById(command.id())) {
+            throw new MenuItemAlreadyExistsException(command.id());
+        }
+        if (command.restaurantId() == null) {
+            throw new RestaurantNotFoundException(null);
+        }
         Restaurant restaurant = findRestaurant(command.restaurantId());
         return menuItemRepository.save(apply(new MenuItem(), command, restaurant));
     }

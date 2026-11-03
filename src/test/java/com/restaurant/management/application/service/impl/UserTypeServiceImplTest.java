@@ -101,4 +101,22 @@ class UserTypeServiceImplTest {
         assertThrows(UserTypeNotFoundException.class, () -> service.delete(99L));
         verify(repository, never()).deleteById(any());
     }
+
+    @Test
+    @DisplayName("deve listar todos, buscar por id e excluir com sucesso")
+    void shouldFindAllFindByIdAndDelete() {
+        UserType existing = new UserType();
+        existing.setId(1L);
+        existing.setName("Cliente");
+
+        when(repository.findAll()).thenReturn(java.util.List.of(existing));
+        when(repository.findById(1L)).thenReturn(Optional.of(existing));
+        when(repository.existsById(1L)).thenReturn(true);
+
+        assertEquals(1, service.findAll().size());
+        assertEquals("Cliente", service.findById(1L).getName());
+
+        service.delete(1L);
+        verify(repository).deleteById(1L);
+    }
 }

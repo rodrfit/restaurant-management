@@ -1,5 +1,14 @@
-package com.restaurant.management.exception;
+package com.restaurant.management.infrastructure.web;
 
+import com.restaurant.management.domain.exception.EmailAlreadyExistsException;
+import com.restaurant.management.domain.exception.InvalidPasswordException;
+import com.restaurant.management.domain.exception.MenuItemAlreadyExistsException;
+import com.restaurant.management.domain.exception.MenuItemNotFoundException;
+import com.restaurant.management.domain.exception.RestaurantAlreadyExistsException;
+import com.restaurant.management.domain.exception.RestaurantNotFoundException;
+import com.restaurant.management.domain.exception.UserNotFoundException;
+import com.restaurant.management.domain.exception.UserTypeAlreadyExistsException;
+import com.restaurant.management.domain.exception.UserTypeNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;

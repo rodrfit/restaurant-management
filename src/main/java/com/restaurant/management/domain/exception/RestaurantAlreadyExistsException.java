@@ -1,4 +1,4 @@
-package com.restaurant.management.exception;
+package com.restaurant.management.domain.exception;
 
 public class RestaurantAlreadyExistsException extends RuntimeException {
     public RestaurantAlreadyExistsException() {

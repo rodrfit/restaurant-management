@@ -46,6 +46,11 @@ public class RestaurantRepositoryAdapter implements RestaurantRepository {
     }
 
     @Override
+    public boolean existsByOwnerId(Long ownerId) {
+        return delegate.existsByOwnerId(ownerId);
+    }
+
+    @Override
     public List<Restaurant> findByNameContainingIgnoreCase(String name) {
         return delegate.findByNomeContainingIgnoreCase(name).stream().map(RestaurantMapper::toDomain).toList();
     }
