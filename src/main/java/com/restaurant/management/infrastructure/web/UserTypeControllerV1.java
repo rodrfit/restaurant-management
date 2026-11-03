@@ -81,6 +81,14 @@ public class UserTypeControllerV1 {
             ),
             @ApiResponse(
                     responseCode = "400",
+                    description = "Requisição inválida. ID informado em formato incorreto",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
                     description = "Dados inválidos",
                     content = @Content(
                             mediaType = "application/json",
@@ -118,6 +126,14 @@ public class UserTypeControllerV1 {
                     responseCode = "204",
                     description = "Tipo de usuário deletado com sucesso",
                     content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Requisição inválida. ID informado em formato incorreto",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
             ),
             @ApiResponse(
                     responseCode = "404",
@@ -160,6 +176,14 @@ public class UserTypeControllerV1 {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = UserTypeResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Requisição inválida. ID informado em formato incorreto",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
                     )
             ),
             @ApiResponse(

@@ -160,6 +160,14 @@ public class UserControllerV1 {
                     )
             ),
             @ApiResponse(
+                    responseCode = "400",
+                    description = "Requisição inválida. ID informado em formato incorreto",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class)
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "404",
                     description = "Usuário ou tipo de usuário não encontrado",
                     content = @Content(

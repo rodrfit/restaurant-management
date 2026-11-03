@@ -325,6 +325,38 @@
           "response": []
         },
         {
+          "name": "Get User Type By Id - Invalid ID (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status deve ser 400\", function () {\n    pm.response.to.have.status(400);\n});\n",
+                  "pm.test(\"Resposta deve informar ID inválido\", function () {\n    const response = pm.response.json();\n    pm.expect(JSON.stringify(response)).to.include('ID informado em formato incorreto');\n});\n"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/user-types/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "user-types",
+                "abc"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Update User Type",
           "request": {
             "method": "PUT",

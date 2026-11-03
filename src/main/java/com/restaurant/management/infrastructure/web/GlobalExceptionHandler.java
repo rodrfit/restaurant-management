@@ -1,12 +1,5 @@
-package com.restaurant.management.infrastructure.web;
+package com.restaurant.management.exception;
 
-import com.restaurant.management.domain.exception.MenuItemNotFoundException;
-import com.restaurant.management.domain.exception.RestaurantNotFoundException;
-import com.restaurant.management.domain.exception.EmailAlreadyExistsException;
-import com.restaurant.management.domain.exception.InvalidPasswordException;
-import com.restaurant.management.domain.exception.UserNotFoundException;
-import com.restaurant.management.domain.exception.UserTypeAlreadyExistsException;
-import com.restaurant.management.domain.exception.UserTypeNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -39,8 +33,28 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler(RestaurantNotFoundException.class)
+    public ProblemDetail handleRestaurantNotFound(RestaurantNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(MenuItemNotFoundException.class)
+    public ProblemDetail handleMenuItemNotFound(MenuItemNotFoundException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(UserTypeAlreadyExistsException.class)
     public ProblemDetail handleUserTypeAlreadyExists(UserTypeAlreadyExistsException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(RestaurantAlreadyExistsException.class)
+    public ProblemDetail handleRestaurantAlreadyExists(RestaurantAlreadyExistsException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(MenuItemAlreadyExistsException.class)
+    public ProblemDetail handleMenuItemAlreadyExists(MenuItemAlreadyExistsException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
@@ -57,20 +71,18 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
     }
 
-    @ExceptionHandler(MenuItemNotFoundException.class)
-    public ProblemDetail handleMenuItemNotFound(MenuItemNotFoundException ex) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler(RestaurantNotFoundException.class)
-    public ProblemDetail handleRestaurantNotFound(RestaurantNotFoundException ex) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                "Requisição inválida. ID informado em formato incorreto"
+        );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         log.error("Violação de integridade no banco", ex);
-        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Operação viola uma restrição de integridade (registro duplicado ou em uso)");
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Dados duplicados ou inválidos (e-mail/login)");
     }
 
     @ExceptionHandler(Exception.class)
