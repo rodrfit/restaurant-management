@@ -17,7 +17,7 @@ Autores:
 
 Data: 03/11/2026
 
-Repositório: https://github.com/rodrfit/restaurant-management
+Repositório: [https://github.com/rodrfit/restaurant-management](https://github.com/rodrfit/restaurant-management)
 
 ---
 
@@ -377,7 +377,7 @@ O healthcheck do Compose usa o usuário `root` e a senha `root`. `MYSQL_ROOT_PAS
 
 ### 9.2 Passo a passo
 
-1. Clonar `https://github.com/rodrfit/restaurant-management.git` e entrar na pasta.
+1. Clonar [https://github.com/rodrfit/restaurant-management.git](https://github.com/rodrfit/restaurant-management.git) e entrar na pasta.
 2. Copiar o exemplo: `cp .env.example .env`.
 3. Subir aplicação e banco: `docker compose up --build -d`.
 4. Aguardar o MySQL ficar saudável e a aplicação responder em http://localhost:8080.
@@ -439,13 +439,13 @@ O ponto de atenção na execução é o banco criado na Fase 1: a coluna `users_
 
 O código da Fase 2 está no repositório público do projeto:
 
-https://github.com/rodrfit/restaurant-management
+[https://github.com/rodrfit/restaurant-management](https://github.com/rodrfit/restaurant-management)
 
 ## 14. Vídeo
 
 O Tech Challenge pede um vídeo da solução. A apresentação está publicada em:
 
-https://www.youtube.com/watch?v=wLAZZFPcrb8
+[https://www.youtube.com/watch?v=wLAZZFPcrb8](https://www.youtube.com/watch?v=wLAZZFPcrb8)
 
 ## 15. Documentos complementares
 
