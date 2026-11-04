@@ -17,7 +17,7 @@ server:
   port: 8080
 
 springdoc:
-  packages-to-scan: com.restaurant.management.controller
+  packages-to-scan: com.restaurant.management.infrastructure.web
   api-docs:
     path: /v3/api-docs
   swagger-ui:

@@ -56,6 +56,7 @@ Thumbs.db
 # Environment & Secret files #
 .env
 *.env
+!.env.example
 
 # Local Docker Data #
 mysql_data/
